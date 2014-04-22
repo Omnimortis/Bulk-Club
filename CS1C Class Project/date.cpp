@@ -10,7 +10,7 @@
 //default constructor
 date::date()
 {
-	month = 0;
+	month = 1;
 	day = 0;
 	year = 0;
 }
