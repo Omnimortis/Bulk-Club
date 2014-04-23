@@ -1,10 +1,7 @@
-/*
- * member.cpp
- *
- *  Created on: Apr 22, 2014
- *      Author: mclark47
- */
-//Matt Clark
-
-
-
+/**************************************************************************
+ * AUTHOR       : Matt Clark
+ * Class Project: Bulk Club
+ * CLASS        : CS1C
+ * SECTION      : TTh: 8:30AM - 9:50AM
+ * Due Date     : 5/15/2014
+ *************************************************************************/

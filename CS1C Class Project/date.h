@@ -1,9 +1,9 @@
 /**************************************************************************
- * AUTHOR		: Matt Clark
- * Assignment #1: Employee
- * CLASS		: CS1C
- * SECTION		: TTh: 8:30AM - 9:50AM
- * Due Date		: 2/11/2014
+ * AUTHOR       : Matt Clark
+ * Class Project: Bulk Club
+ * CLASS        : CS1C
+ * SECTION      : TTh: 8:30AM - 9:50AM
+ * Due Date     : 5/15/2014
  *************************************************************************/
 #ifndef DATE_H_
 #define DATE_H_
