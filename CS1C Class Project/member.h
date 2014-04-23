@@ -9,6 +9,7 @@
 #define MEMBER_H_
 
 #include <string>
+#include "date.h"
 using namespace std;
 
 class member
@@ -18,14 +19,14 @@ public:
         //default constructor
 
     member(string& initName, int initID, bool initType, date& initExpDate,
-            int initSpent, int initRebate);
+            int initAmtSpent, int initRebateAmt);
         //non-default constructor
 
     void setName(string& input);
         //set the name
         //Post: member is changed and name is set to input
 
-    string& getName();
+    string getName();
         //returns the name of the member
 
     void setID(int input);
@@ -46,7 +47,7 @@ public:
         //set the member expiration date
         //Post: member is changed and expDate is set to input
 
-    date& getexpDate();
+    date getExpDate();
         //return the member expiration date
 
     void setAmtSpent(int input);
@@ -56,7 +57,23 @@ public:
     int getAmtSpent();
         //return the member's amount spent
 
+    void setRebateAmount(int input);
+        //set the member's rebate amount
+        //Post: member is changed and rebateAmount is set to input
 
+    int getRebateAmt();
+        //return the member's rebate amount
+
+    string toString();
+        //return a string representation of the member
+
+private:
+    string name;
+    int id;
+    bool type;
+    date expDate;
+    int amtSpent;
+    int rebateAmt;
 };
 
 #endif /* MEMBER_H_ */
