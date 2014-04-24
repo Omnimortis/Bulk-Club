@@ -79,30 +79,30 @@ string purchase::toString() const
 	    string temp;
 	    ostringstream convert;
 
-	    rtn += "Member Name: " + bulkMember->getName() + "\n";
-
-	    convert << bulkMember->getID();
-	    temp = convert.str();
-	    rtn += ("Member Number: " + temp + "\n");
-	    convert.str("");
-
-	    if (type == true)
-	        temp = "Preferred";
-	    else
-	        temp = "Basic";
-	    rtn += ("Membership Type: " + temp + "\n");
-
-	    rtn += "Membership Expiration: " + expDate.toString() + "\n";
-
-	    convert << amtSpent;
-	    temp = convert.str();
-	    rtn += ("Total Amount Spent: $" + temp + "\n");
-	    convert.str("");
-
-	    convert << rebateAmt;
-	    temp = convert.str();
-	    rtn += ("Rebate Anount: $" + temp + "\n");
-	    convert.str("");
+//	    rtn += "Member Name: " + bulkMember->getName() + "\n";
+//
+//	    convert << bulkMember->getID();
+//	    temp = convert.str();
+//	    rtn += ("Member Number: " + temp + "\n");
+//	    convert.str("");
+//
+//	    if (type == true)
+//	        temp = "Preferred";
+//	    else
+//	        temp = "Basic";
+//	    rtn += ("Membership Type: " + temp + "\n");
+//
+//	    rtn += "Membership Expiration: " + expDate.toString() + "\n";
+//
+//	    convert << amtSpent;
+//	    temp = convert.str();
+//	    rtn += ("Total Amount Spent: $" + temp + "\n");
+//	    convert.str("");
+//
+//	    convert << rebateAmt;
+//	    temp = convert.str();
+//	    rtn += ("Rebate Anount: $" + temp + "\n");
+//	    convert.str("");
 
 	    return rtn;
 
