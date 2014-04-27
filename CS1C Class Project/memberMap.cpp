@@ -8,9 +8,10 @@
 #include <string>
 #include "memberMap.h"
 using namespace std;
-
+/*
 memberMap::memberMap()
 {
 }//end constructor
 
 void memberMap::
+*/

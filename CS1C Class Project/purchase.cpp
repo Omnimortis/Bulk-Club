@@ -125,6 +125,6 @@ string purchase::toString() const
 //	ss << right;
 
 	// PROCESSING - string stream variable is converted to string and returned
-	return ss.str();
+	//return ss.str();
 }
 
