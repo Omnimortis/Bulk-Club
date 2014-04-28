@@ -5,7 +5,6 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-
 #include "member.h"
 #include <iomanip>
 #include <iostream>
@@ -15,21 +14,19 @@
 #include <iterator>
 #include <limits>
 #include "RuntimeException.h"
-
-
-
-
 using namespace std;
+
+#define INTERFACE 1
+
 
 int validInt(int, int);
 int getReportType(const vector<const char*> &);
 
-
 const int maxWidth = 80;
-enum  {PURCHASE_BY_DAY =1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
+enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
 		TOTAL_SALES, QUANTATIES, REBATES, DUES_PAID,
-		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,EXIT
-};
+		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,
+		EXIT};
 
 int main()
 {
@@ -44,42 +41,34 @@ int main()
     member m1(name, 11111, true, d, 1000, 100);
 
     cout << m1.toString() << "\n";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+#if INTERFACE
 	int menuChoice;
 	int filterType;
-	const char* menuOps[] = {"View Purchases for given day" , "View Purchases for given item",
-			"View Purchases for given member", "View Total Sales", "View Quantity of Items Sold",
-	"View Member Rebate Report", "View Membership Dues Paid", "View Membership Expirations",
-	"Check for Membership Upgrades", "Check for Membership Downgrades", "Add/Delete/Edit Members", "Exit"};
+	
+	const char* menuOptions[] = {"View Purchases for given day",
+	        "View Purchases for given item",
+	        "View Purchases for given member", "View Total Sales",
+	        "View Quantity of Items Sold", "View Member Rebate Report",
+	        "View Membership Dues Paid", "View Membership Expirations",
+	        "Check for Membership Upgrades",
+	        "Check for Membership Downgrades", "Add/Delete/Edit Members",
+	        "Exit"};
 
-	const char* reportType[] = {"Basic Members Only", "Preferred Members Only", "All Members"};
+	const char* reportType[] = {"Basic Members Only",
+	        "Preferred Members Only", "All Members"};
 
 	const char* modifyType[] ={"Add", "Delete", "Modify", "Exit"};
 
-	vector<const char*> menuVector(menuOps, menuOps+12);  // Vector storing menu
-	vector<const char*> reportTypeV(reportType, reportType+3); // Vector storing report type menu
+	// Vector storing menu
+	vector<const char*> menuVector(menuOptions, menuOptions+12);
+	// Vector storing report type menu
+	vector<const char*> reportTypeV(reportType, reportType+3);
 	vector<const char*> modifyTypeV(modifyType, modifyType+4);
 
 	bool exit = false;
+
+	//output welcome statement
 	cout << setfill('*')  << setw(maxWidth) <<"*" << endl
 	     << setw(maxWidth/3) << "| " << setw(2) << setfill(' ') <<""
 		 << "BULK CLUB MANAGER SUITE "
@@ -158,6 +147,7 @@ int main()
 		}
 		cout << endl;
 	} while (!exit);
+#endif
 	return 0;
 }
 
@@ -206,8 +196,3 @@ int getReportType(const vector<const char*> &)
 	cout << "Report Type: ";
 	return(validInt(1,3));
 }
-
-
-
-
-

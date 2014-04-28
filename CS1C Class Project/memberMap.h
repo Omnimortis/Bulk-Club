@@ -39,7 +39,7 @@ public:
         //returns the member with the name memberName
 
 private:
-    map<int, member> map;
+    map<int, member> idMap;
     map<string, int> nameMap;
 };
 
