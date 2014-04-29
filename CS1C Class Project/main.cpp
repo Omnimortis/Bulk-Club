@@ -1,5 +1,5 @@
 /**************************************************************************
- * AUTHOR       : Matt Clark
+ * AUTHOR       : Matt Clark & Nate Bailey
  * Class Project: Bulk Club
  * CLASS        : CS1C
  * SECTION      : TTh: 8:30AM - 9:50AM
@@ -46,25 +46,33 @@ int main()
 	int menuChoice;
 	int filterType;
 	
-	const char* menuOptions[] = {"View Purchases for given day",
-	        "View Purchases for given item",
-	        "View Purchases for given member", "View Total Sales",
-	        "View Quantity of Items Sold", "View Member Rebate Report",
-	        "View Membership Dues Paid", "View Membership Expirations",
-	        "Check for Membership Upgrades",
-	        "Check for Membership Downgrades", "Add/Delete/Edit Members",
-	        "Exit"};
+    vector<const char*> menuOptions;
 
-	const char* reportType[] = {"Basic Members Only",
-	        "Preferred Members Only", "All Members"};
+    menuOptions.push_back("View Purchases for given day");
+    menuOptions.push_back("View Purchases for given item");
+    menuOptions.push_back("View Purchases for given member");
+    menuOptions.push_back("View Total Sales");
+    menuOptions.push_back("View Quantity of Items Sold");
+    menuOptions.push_back("View Member Rebate Report");
+    menuOptions.push_back("View Membership Dues Paid");
+    menuOptions.push_back("View Membership Expirations");
+    menuOptions.push_back("Check for Membership Upgrades");
+    menuOptions.push_back("Check for Membership Downgrades");
+    menuOptions.push_back("Add/Delete/Edit Members");
+    menuOptions.push_back("Exit");
 
-	const char* modifyType[] ={"Add", "Delete", "Modify", "Exit"};
+	vector<const char*> reportType;
 
-	// Vector storing menu
-	vector<const char*> menuVector(menuOptions, menuOptions+12);
-	// Vector storing report type menu
-	vector<const char*> reportTypeV(reportType, reportType+3);
-	vector<const char*> modifyTypeV(modifyType, modifyType+4);
+    reportType.push_back("Basic Members Only");
+    reportType.push_back("Preferred Members Only");
+    reportType.push_back("All members");
+
+    vector<const char*> modifyType;
+
+    modifyType.push_back("Add");
+    modifyType.push_back("Delete");
+    modifyType.push_back("Modify");
+    modifyType.push_back("Exit");
 
 	bool exit = false;
 
@@ -82,31 +90,39 @@ int main()
 
 	do
 	{
-		// OUTPUT - Display menu option stored in menuVector and prompt for input
-		for (unsigned int index=0; index < menuVector.size(); index++)
-			cout << index+1 << ". "<< menuVector.at(index) << endl;
+		// OUTPUT - Display menu options stored in menuOptions and prompt
+	    //          for input
+		for (unsigned int i = 0; i < menuOptions.size(); i++)
+		{
+            cout << i + 1 << ". "<< menuOptions.at(i) << endl;
+		}
 
 		cout << "\nPlease enter your choice: ";
 
 		// INPUT/OUTPUT - Call validInt function to accept valid input
-		//		   Returns into menuChoice integer variable
+		//		          Returns into menuChoice integer variable
 
-		menuChoice = validInt(1,menuVector.size());
+		menuChoice = validInt(1, menuOptions.size());
 
-		cout <<  endl << menuVector[menuChoice-1] << endl << endl;
+		cout <<  endl << menuOptions[menuChoice-1] << endl << endl;
+
 		if (menuChoice != PURCHASE_BY_MEMBER && menuChoice != REBATES &&
-				menuChoice != UPGRADES && menuChoice != DOWNGRADES && menuChoice !=EXIT )
-			cout << reportTypeV[(filterType=getReportType(reportTypeV)-1)] << endl << endl;
+				menuChoice != UPGRADES && menuChoice != DOWNGRADES
+				&& menuChoice !=EXIT )
+		{
+            cout << reportType[(filterType = getReportType(reportType) - 1)]
+                 << endl << endl;
+		}
 
 		switch(menuChoice)
 		{
-			case PURCHASE_BY_DAY:  //
+			case PURCHASE_BY_DAY:
 				cout << "Please choose day to view sales report for";
 				break;
 			case PURCHASE_BY_ITEM:
 				cout << "Enter Item Name: ";
 				break;
-			case PURCHASE_BY_MEMBER:   // NOT
+			case PURCHASE_BY_MEMBER:
 				cout << "Search by Member Name or Number?";
 				cout << "1. Member Name" << endl;
 				cout << "2. Member Number" << endl;
@@ -118,8 +134,9 @@ int main()
 			case QUANTATIES:
 				cout << "Printing quantities of items sold ";
 				break;
-			case REBATES:  // NOT
-				cout << "Printing rebate information for Preferred Members ";
+			case REBATES:
+				cout << "Printing rebate information for Preferred"
+				        "Members ";
 				break;
 			case DUES_PAID:
 				cout << "Printing membership dues  ";
@@ -127,18 +144,23 @@ int main()
 			case MEMBERSHIP_EXPIRTATIONS:
 				cout << "Enter month to check for membership expirations";
 				break;
-			case UPGRADES: // NOT
-				cout << "Checking for members that would benefit from an upgrade";
+			case UPGRADES:
+				cout << "Checking for members that would benefit from an"
+				        "upgrade";
 				break;
-			case DOWNGRADES: // NOT
-				cout << "Checking for members that would benefit from an upgrade";
+			case DOWNGRADES:
+				cout << "Checking for members that would benefit from an"
+				        "upgrade";
 				break;
 			case MODIFY_MEMBERS:  // Handle logic
 				cout << "What would you like to do?" << endl;
-				for (unsigned int index=0; index < modifyTypeV.size(); index++)
-						cout << index+1 << ". "<< modifyTypeV.at(index) << endl;
+				for (unsigned int i = 0; i < modifyType.size(); i++)
+				{
+                    cout << i+1 << ". "<< modifyType.at(i) << endl;
+				}
+
 				menuChoice = validInt(1, 4);
-				cout << "You have chosen " << modifyTypeV[menuChoice -1] << endl;
+				cout << "You have chosen " << modifyType[menuChoice -1] << endl;
 				break;
 			case EXIT:
 				cout << "Goodbye";
