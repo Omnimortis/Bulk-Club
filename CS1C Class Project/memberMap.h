@@ -40,7 +40,7 @@ public:
 
 private:
     map<int, member> idMap;
-    map<string, int> nameMap;
+    map<string, member> nameMap;
 };
 
 
