@@ -94,7 +94,7 @@ int main()
 	    //          for input
 		for (unsigned int i = 0; i < menuOptions.size(); i++)
 		{
-            cout << i + 1 << ". "<< menuOptions.at(i) << endl;
+            cout << i + 1 << ". " << menuOptions[i] << endl;
 		}
 
 		cout << "\nPlease enter your choice: ";
@@ -104,13 +104,14 @@ int main()
 
 		menuChoice = validInt(1, menuOptions.size());
 
-		cout <<  endl << menuOptions[menuChoice-1] << endl << endl;
+		cout << endl << menuOptions[menuChoice - 1] << endl << endl;
 
 		if (menuChoice != PURCHASE_BY_MEMBER && menuChoice != REBATES &&
 				menuChoice != UPGRADES && menuChoice != DOWNGRADES
 				&& menuChoice !=EXIT )
 		{
-            cout << reportType[(filterType = getReportType(reportType) - 1)]
+			filterType = getReportType(reportType);
+            cout << reportType[(filterType - 1)]
                  << endl << endl;
 		}
 
@@ -173,40 +174,25 @@ int main()
 	return 0;
 }
 
-
 int validInt(int lowerB, int upperB)
 {
-	string buff;
+	string input;
 	int choice;
 
-	while (getline(cin, buff))
+	while (getline(cin, input))
 	{
-		stringstream ss(buff);
+		stringstream ss(input);
 		if (ss >> choice && (choice >= lowerB) && (choice <= upperB))
 		{
 			if(ss.eof())
+			{
 				break;
+			}
+
 		}
 		cout << "Invalid Input, please try again: ";
 	}
 	return choice;
-}
-
-
-int stringToInt(string input)
-{
-	int rtn;
-	istringstream convert(input);
-	try
-	{
-		convert >> rtn;
-		throw RuntimeException("*** Please Enter an Integer ***");
-	}
-	catch(RuntimeException& err)
-	{
-		cout << err.getMessage() << endl;
-	}
-	return rtn;
 }
 
 int getReportType(const vector<const char*> &)
@@ -216,5 +202,5 @@ int getReportType(const vector<const char*> &)
 	cout << "2. Preferred Only" << endl;
 	cout << "3. Both" << endl;
 	cout << "Report Type: ";
-	return(validInt(1,3));
+	return validInt(1, 3);
 }
