@@ -8,10 +8,15 @@
 #include <string>
 #include "memberMap.h"
 using namespace std;
-/*
+
 memberMap::memberMap()
 {
 }//end constructor
 
-void memberMap::
-*/
+void memberMap::add(member& input)
+{
+    idMap.insert(pair<int, member>(input.getID(), input));
+    nameMap.insert(pair<string, member>(input.getName(), input));
+}//end add function
+
+
