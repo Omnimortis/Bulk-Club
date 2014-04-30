@@ -9,7 +9,9 @@
 #define MEMBER_H_
 
 #include <string>
+#include <vector>
 #include "date.h"
+#include "purchase.h"
 using namespace std;
 
 class member
@@ -64,6 +66,12 @@ public:
     int getRebateAmt();
         //return the member's rebate amount
 
+    void addPurchase(purchase& input);
+        //add a new purchase to the vector of purchases
+        //Post: member is changed and input is inserted into purchases
+
+    purchase& getPurchase();
+
     string toString();
         //return a string representation of the member
 
@@ -74,6 +82,7 @@ private:
     date expDate;
     int amtSpent;
     int rebateAmt;
+    vector<purchase> purchases;
 };
 
 #endif /* MEMBER_H_ */
