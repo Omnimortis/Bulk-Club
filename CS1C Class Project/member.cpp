@@ -1,5 +1,5 @@
 /**************************************************************************
- * AUTHOR       : Matt Clark
+ * AUTHOR       : Matt Clark & Nate Bailey
  * Class Project: Bulk Club
  * CLASS        : CS1C
  * SECTION      : TTh: 8:30AM - 9:50AM
@@ -33,7 +33,7 @@ void member::setName(string& input)
     name = input;
 }
 
-string member::getName()
+string member::getName() const
 {
     return name;
 }
@@ -43,7 +43,7 @@ void member::setID(int input)
     id = input;
 }
 
-int member::getID()
+int member::getID() const
 {
     return id;
 }
@@ -53,7 +53,7 @@ void member::setType(bool input)
     type = input;
 }
 
-bool member::getType()
+bool member::getType() const
 {
     return type;
 }
@@ -63,7 +63,7 @@ void member::setExpDate(date& input)
     expDate = input;
 }
 
-date member::getExpDate()
+date member::getExpDate() const
 {
     return expDate;
 }
@@ -73,7 +73,7 @@ void member::setAmtSpent(int input)
     amtSpent = input;
 }
 
-int member::getAmtSpent()
+int member::getAmtSpent() const
 {
     return amtSpent;
 }
@@ -83,12 +83,22 @@ void member::setRebateAmount(int input)
     rebateAmt = input;
 }
 
-int member::getRebateAmt()
+int member::getRebateAmt() const
 {
     return rebateAmt;
 }
 
-string member::toString()
+void member::addPurchase(purchase& input)
+{
+    purchases.push_back(input);
+}
+
+vector<purchase>& member::getPurchases() const
+{
+    return purchases;
+}
+
+string member::toString() const
 {
     string rtn = "";
     string temp;

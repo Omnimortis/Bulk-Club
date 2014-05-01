@@ -1,13 +1,12 @@
-/*
- * purchase.h
- *
- *  Created on: Apr 23, 2014
- *      Author: nbailey4
- */
-
+/**************************************************************************
+ * AUTHOR       : Matt Clark & Nate Bailey
+ * Class Project: Bulk Club
+ * CLASS        : CS1C
+ * SECTION      : TTh: 8:30AM - 9:50AM
+ * Due Date     : 5/15/2014
+ *************************************************************************/
 #ifndef PURCHASE_H_
 #define PURCHASE_H_
-
 
 #include <iostream>
 #include <sstream>
@@ -16,35 +15,45 @@
 #include "member.h"
 using namespace std;
 
+class member;
 
 class purchase
 {
 public:
 	purchase();
-	purchase(string nameInit, int quantityInit,int totalInit,
+
+	purchase(string& nameInit, int quantityInit, float totalInit,
 			member& memberInit, int monthInit, int dayInit,
 			int yearInit);
+
 	void setDate(int month, int day, int year);
-	date* getDate() const;
-	void setItemName(string nameSet);
+
+	date& getDate() const;
+
+	void setItemName(string& nameSet);
+
 	string getItemName() const;
+
 	void setQuantity(int quantitySet);
+
 	int getQuantity() const;
-	void setTotalAmount(int totalSet);
-	int getTotalAmount() const;
+
+	void setTotalAmount(float totalSet);
+
+	float getTotalAmount() const;
+
 	void setMember(member& member);
+
 	member* getMember() const;
+
 	string toString() const;
 
 private:
 	string itemName;
 	int quantity;
-	int totalAmount;
-	member* bulkMember;
+	float totalAmount;
+	member *bulkMember;
 	date purchaseDate;
-
 };
-
-
 
 #endif /* PURCHASE_H_ */

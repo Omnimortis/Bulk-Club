@@ -1,11 +1,10 @@
 /**************************************************************************
-* AUTHOR          : Nathan Bailey          				                  *
-* STUDENT ID      : 353678                  		                      *
-* CLASS           : CS1C                                                  *
-* SECTION         : TTH 8:30am-11:50am (PST)                              *
-* ASSIGNMENT # 11 : Exceptions				  			                  *
-* DUE DATE        : 4/15/2014                                             *
-**************************************************************************/
+ * AUTHOR       : Matt Clark & Nate Bailey
+ * Class Project: Bulk Club
+ * CLASS        : CS1C
+ * SECTION      : TTh: 8:30AM - 9:50AM
+ * Due Date     : 5/15/2014
+ *************************************************************************/
 #ifndef RUNTIMEEXCEPTION_H_
 #define RUNTIMEEXCEPTION_H_
 

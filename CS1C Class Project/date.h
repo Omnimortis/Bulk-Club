@@ -1,5 +1,5 @@
 /**************************************************************************
- * AUTHOR       : Matt Clark
+ * AUTHOR       : Matt Clark & Nate Bailey
  * Class Project: Bulk Club
  * CLASS        : CS1C
  * SECTION      : TTh: 8:30AM - 9:50AM

@@ -1,46 +1,48 @@
 /**************************************************************************
- * AUTHOR       : Matt Clark
+ * AUTHOR       : Matt Clark & Nate Bailey
  * Class Project: Bulk Club
  * CLASS        : CS1C
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
 #ifndef MEMBERMAP_H_
-#define MEMBERMAP_H_
+#define DATABASE_H_
 
 #include <string>
 #include <map>
 #include "member.h"
 using namespace std;
 
-class memberMap
+class database
 {
 public:
-    memberMap();
+    database();
         //default constructor
 
-    void add(member& input);
+    void addMember(member& input);
         //add a new member
         //Post: memberMap is changed and input is added to map and the
         //      name is added to nameMap
 
-    void remove(int memberID);
+    void removeMember(int memberID);
         //remove the member with the id memberID
         //Post: memberMap is changed and the specified member is removed
 
-    void remove(string& memberName);
+    void removeMember(string& memberName);
         //remove the member with the name memberName
         //Post memberMap is changed and the specified member is removed
 
-    member& find(int memberID);
+    member& findMember(int memberID);
         //returns the member with the id memberID
 
-    member& find(string& memberName);
+    member& findMember(string& memberName);
         //returns the member with the name memberName
 
 private:
     map<int, member> idMap;
     map<string, member> nameMap;
+    multimap<date, purchase> purchaseByDateMap;
+    multimap<int, purchase> purchaseByIDMap;
 };
 
 

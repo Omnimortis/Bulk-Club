@@ -1,23 +1,25 @@
-/*
- * purchase.cpp
- *
- *  Created on: Apr 23, 2014
- *      Author: nbailey4
- */
-
+/**************************************************************************
+ * AUTHOR       : Matt Clark & Nate Bailey
+ * Class Project: Bulk Club
+ * CLASS        : CS1C
+ * SECTION      : TTh: 8:30AM - 9:50AM
+ * Due Date     : 5/15/2014
+ *************************************************************************/
 #include "purchase.h"
 
-purchase::purchase(): itemName(" "), quantity(0), totalAmount(0), bulkMember(NULL)
+purchase::purchase():
+                itemName(" "), quantity(0), totalAmount(0),
+                bulkMember(NULL)
 {
-
 }
 
 purchase::purchase(string nameInit, int quantityInit,int totalInit,
 		member& memberInit, int monthInit, int dayInit,
-		int yearInit): itemName(nameInit), quantity(quantityInit), totalAmount(totalInit),
-			bulkMember(&memberInit),purchaseDate(monthInit, dayInit, yearInit)
+		int yearInit):
+		        itemName(nameInit), quantity(quantityInit),
+		        totalAmount(totalInit), bulkMember(&memberInit),
+		        purchaseDate(monthInit, dayInit, yearInit)
 {
-
 }
 
 void purchase::setDate(int monthInit, int dayInit, int yearInit)
@@ -25,13 +27,13 @@ void purchase::setDate(int monthInit, int dayInit, int yearInit)
 	purchaseDate.setDate(monthInit, dayInit, yearInit);
 }
 
-//date* purchase::getDate() const
-//{
-//	return &purchaseDate;
-//
-//}
+date& purchase::getDate() const
+{
+	return purchaseDate;
 
-void purchase::setItemName(string nameSet)
+}
+
+void purchase::setItemName(string& nameSet)
 {
 	itemName = nameSet;
 }
@@ -51,12 +53,12 @@ int purchase::getQuantity() const
 	return quantity;
 }
 
-void purchase::setTotalAmount(int totalSet)
+void purchase::setTotalAmount(float totalSet)
 {
 	totalAmount = totalSet;
 }
 
-int purchase::getTotalAmount() const
+float purchase::getTotalAmount() const
 {
 	return totalAmount;
 }
