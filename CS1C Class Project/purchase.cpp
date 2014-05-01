@@ -13,7 +13,7 @@ purchase::purchase():
 {
 }
 
-purchase::purchase(string nameInit, int quantityInit,int totalInit,
+purchase::purchase(string& nameInit, int quantityInit,float totalInit,
 		member& memberInit, int monthInit, int dayInit,
 		int yearInit):
 		        itemName(nameInit), quantity(quantityInit),
@@ -27,10 +27,9 @@ void purchase::setDate(int monthInit, int dayInit, int yearInit)
 	purchaseDate.setDate(monthInit, dayInit, yearInit);
 }
 
-date& purchase::getDate() const
+date& purchase::getDate()
 {
 	return purchaseDate;
-
 }
 
 void purchase::setItemName(string& nameSet)

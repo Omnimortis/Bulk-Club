@@ -93,7 +93,7 @@ void member::addPurchase(purchase& input)
     purchases.push_back(input);
 }
 
-vector<purchase>& member::getPurchases() const
+vector<purchase>& member::getPurchases()
 {
     return purchases;
 }

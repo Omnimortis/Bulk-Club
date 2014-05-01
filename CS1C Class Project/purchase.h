@@ -28,7 +28,7 @@ public:
 
 	void setDate(int month, int day, int year);
 
-	date& getDate() const;
+	date& getDate();
 
 	void setItemName(string& nameSet);
 
