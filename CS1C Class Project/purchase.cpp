@@ -13,7 +13,7 @@ purchase::purchase():
 {
 }
 
-purchase::purchase(string& nameInit, int quantityInit,float totalInit,
+purchase::purchase(string nameInit, int quantityInit,float totalInit,
 		member& memberInit, int monthInit, int dayInit,
 		int yearInit):
 		        itemName(nameInit), quantity(quantityInit),
@@ -76,56 +76,25 @@ member* purchase::getMember()
 string purchase::toString()
 {
 
-		string rtn = "";
-	    string temp;
-	    ostringstream convert;
-
-//	    rtn += "Member Name: " + bulkMember->getName() + "\n";
-//
-//	    convert << bulkMember->getID();
-//	    temp = convert.str();
-//	    rtn += ("Member Number: " + temp + "\n");
-//	    convert.str("");
-//
-//	    if (type == true)
-//	        temp = "Preferred";
-//	    else
-//	        temp = "Basic";
-//	    rtn += ("Membership Type: " + temp + "\n");
-//
-//	    rtn += "Membership Expiration: " + expDate.toString() + "\n";
-//
-//	    convert << amtSpent;
-//	    temp = convert.str();
-//	    rtn += ("Total Amount Spent: $" + temp + "\n");
-//	    convert.str("");
-//
-//	    convert << rebateAmt;
-//	    temp = convert.str();
-//	    rtn += ("Rebate Anount: $" + temp + "\n");
-//	    convert.str("");
-
-	    return rtn;
-
-
-
-	//ostringstream ss; // PROCESSING - string stream variable used to store
+	stringstream ss; // PROCESSING - string stream variable used to store
 					  //              data member string
 
 	// PROCESSING - data members are added to string stream with various set
 	//				widths for formatted output
-//	ss << left << setw(20) << itemName;
-//	ss << setw(10) << id;
-//	ss << setw(15) << phone;
-//	ss << setw(4) << age;
-//	ss << setw(8) << gender;
-//	ss << setw(15) << jobTitle;
-//	ss << setw(10) << dollarString(salary); // Formated to dollar amount
-//	ss << setw(12) << hireDate.toString(); // Date date members converted
-//										   // to string
-//	ss << right;
+	ss << left << "Purchase Date: " <<  purchaseDate.toString() << endl
+	   << "Item Name: " << itemName << endl
+	   << "Quantity Sold: " << quantity << endl
+	   << "Total Amount: " << totalAmount << endl
+	   << "Member: " << bulkMember->getName() << " - " << bulkMember->getID() << endl
+	   << "Membership Type: " ;
+	   if (bulkMember->getType())
+	        ss << "Preferred";
+	    else
+	        ss << "Basic";
+
+	ss << right;
 
 	// PROCESSING - string stream variable is converted to string and returned
-	//return ss.str();
+	return ss.str();
 }
 

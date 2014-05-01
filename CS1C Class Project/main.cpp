@@ -13,12 +13,13 @@
 #include <vector>
 #include <iterator>
 #include <limits>
+#include <fstream>
 #include "RuntimeException.h"
 using namespace std;
 
 #define INTERFACE 0
 
-
+void initializeMembers(const char *filename );
 int validInt(int, int);
 int getReportType(const vector<const char*> &);
 
@@ -40,8 +41,16 @@ int main()
 
     member m1(name, 11111, true, d, 1000, 100);
 
-    cout << m1.toString() << "\n";
+
+    purchase testPur("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101 );
+
+
+    cout << testPur.toString();
+   // cout << m1.toString() << "\n";
     
+
+    cout << endl << (testPur.getMember())->getType();
+
 #if INTERFACE
 	int menuChoice;
 	int filterType;
@@ -173,6 +182,30 @@ int main()
 #endif
 	return 0;
 }
+
+void initializeMembers(const char *filename )
+{
+	vector<member> memTest;
+	ifstream iFile; // INPUT - input file stream variable
+	iFile.open(filename);
+
+	member* temp;
+
+		while(iFile)
+		{
+			for(int i=0; i <=4; i++)
+			{
+				temp = new member();
+
+				//getline(iFile, temp->);
+			}
+		}
+
+
+	iFile.close();
+
+}
+
 
 int validInt(int lowerB, int upperB)
 {
