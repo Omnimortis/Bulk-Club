@@ -21,16 +21,15 @@ public:
 
     void addMember(member& input);
         //add a new member
-        //Post: memberMap is changed and input is added to map and the
-        //      name is added to nameMap
+        //Post: database is changed and input is added to maps
 
     void removeMember(int memberID);
         //remove the member with the id memberID
-        //Post: memberMap is changed and the specified member is removed
+        //Post: database is changed and the specified member is removed
 
     void removeMember(string& memberName);
         //remove the member with the name memberName
-        //Post memberMap is changed and the specified member is removed
+        //Post database is changed and the specified member is removed
 
     member& findMember(int memberID);
         //returns the member with the id memberID
@@ -38,9 +37,30 @@ public:
     member& findMember(string& memberName);
         //returns the member with the name memberName
 
+    void addPurchase(purchase& input);
+        //add a new purchase
+        //Post: database is changed and input is added to maps
+
+    purchase& getPurchase(multimap<date, purchase>::iterator& input);
+        //returns the purchase represented by the iterator input
+
+    purchase& getPurchase(multimap<int, purchase>::iterator& input);
+        //returns the purchase represented by the iterator input
+
+    pair <const multimap<date, purchase>::iterator,
+    const multimap<date, purchase>::iterator>& getPurchases
+    (const date& input);
+        //returns a pair of iterators that represent the range of purchases
+        //that have the date input
+
+    pair <const multimap<int, purchase>::iterator,
+    const multimap<int, purchase>::iterator>& getPurchases(const int input);
+        //returns a pair of iterators that represent the range of purchases
+        //that have the member ID input
+
 private:
-    map<int, member> idMap;
-    map<string, member> nameMap;
+    map<int, member> memberByIDMap;
+    map<string, member> memberByNameMap;
     multimap<date, purchase> purchaseByDateMap;
     multimap<int, purchase> purchaseByIDMap;
 };

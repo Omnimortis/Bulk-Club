@@ -16,7 +16,7 @@
 #include "RuntimeException.h"
 using namespace std;
 
-#define INTERFACE 1
+#define INTERFACE 0
 
 
 int validInt(int, int);

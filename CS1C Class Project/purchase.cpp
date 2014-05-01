@@ -37,7 +37,7 @@ void purchase::setItemName(string& nameSet)
 	itemName = nameSet;
 }
 
-string purchase::getItemName() const
+string purchase::getItemName()
 {
 	return itemName;
 }
@@ -47,7 +47,7 @@ void purchase::setQuantity(int quantitySet)
 	quantity = quantitySet;
 }
 
-int purchase::getQuantity() const
+int purchase::getQuantity()
 {
 	return quantity;
 }
@@ -57,7 +57,7 @@ void purchase::setTotalAmount(float totalSet)
 	totalAmount = totalSet;
 }
 
-float purchase::getTotalAmount() const
+float purchase::getTotalAmount()
 {
 	return totalAmount;
 }
@@ -67,13 +67,13 @@ void purchase::setMember(member& member)
 	bulkMember = &member;
 }
 
-member* purchase::getMember() const
+member* purchase::getMember()
 {
 	return bulkMember;
 
 }
 
-string purchase::toString() const
+string purchase::toString()
 {
 
 		string rtn = "";

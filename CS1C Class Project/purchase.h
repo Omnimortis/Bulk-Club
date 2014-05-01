@@ -32,21 +32,21 @@ public:
 
 	void setItemName(string& nameSet);
 
-	string getItemName() const;
+	string getItemName();
 
 	void setQuantity(int quantitySet);
 
-	int getQuantity() const;
+	int getQuantity();
 
 	void setTotalAmount(float totalSet);
 
-	float getTotalAmount() const;
+	float getTotalAmount();
 
 	void setMember(member& member);
 
-	member* getMember() const;
+	member* getMember();
 
-	string toString() const;
+	string toString();
 
 private:
 	string itemName;
