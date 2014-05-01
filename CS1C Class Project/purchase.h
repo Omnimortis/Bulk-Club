@@ -13,6 +13,7 @@
 #include <string>
 #include "date.h"
 #include "member.h"
+#include <iomanip>
 using namespace std;
 
 class member;
@@ -22,8 +23,9 @@ class purchase
 public:
 	purchase();
 
-	purchase(string& nameInit, int quantityInit, float totalInit,
+	purchase(string nameInit, int quantityInit, float totalInit,
 			member& memberInit, int monthInit, int dayInit,
+
 			int yearInit);
 
 	void setDate(int month, int day, int year);
