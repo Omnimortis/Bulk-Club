@@ -43,9 +43,9 @@ void date::setDay(int dayInput)
 	day = dayInput;
 }
 
-void date::getDay(int& dayOutput) const
+int date::getDay() const
 {
-	dayOutput = day;
+	return day;
 }
 
 void date::setMonth(int monthInput)
@@ -53,9 +53,9 @@ void date::setMonth(int monthInput)
 	month = monthInput;
 }
 
-void date::getMonth(int& monthOutput) const
+int date::getMonth() const
 {
-	monthOutput = month;
+	return month;
 }
 
 void date::setYear(int yearInput)
@@ -63,9 +63,9 @@ void date::setYear(int yearInput)
 	year = yearInput;
 }
 
-void date::getYear(int& yearOutput) const
+int date::getYear() const
 {
-	yearOutput = year;
+	return year;
 }
 
 //to string function

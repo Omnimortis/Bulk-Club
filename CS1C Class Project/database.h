@@ -13,6 +13,31 @@
 #include "member.h"
 using namespace std;
 
+struct datecomp {
+    bool operator () (const date& lhs, const date& rhs) const
+    {
+        bool rtn;
+
+        if (lhs.getYear() == rhs.getYear())
+        {
+            if (lhs.getMonth() == rhs.getMonth())
+            {
+                rtn = lhs.getDay() < rhs.getDay();
+            }
+            else
+            {
+                rtn = lhs.getMonth() < rhs.getMonth();
+            }
+        }
+        else
+        {
+            rtn = lhs.getYear() < rhs.getYear();
+        }
+
+        return rtn;
+    }
+};
+
 class database
 {
 public:
@@ -47,21 +72,20 @@ public:
     purchase& getPurchase(multimap<int, purchase>::iterator& input);
         //returns the purchase represented by the iterator input
 
-    pair <const multimap<date, purchase>::iterator,
-    const multimap<date, purchase>::iterator>& getPurchases
-    (const date& input);
+    pair <multimap<date, purchase>::iterator,
+    multimap<date, purchase>::iterator> getPurchases (date& input);
         //returns a pair of iterators that represent the range of purchases
         //that have the date input
 
-    pair <const multimap<int, purchase>::iterator,
-    const multimap<int, purchase>::iterator>& getPurchases(const int input);
+    pair <multimap<int, purchase>::iterator,
+    multimap<int, purchase>::iterator> getPurchases (int input);
         //returns a pair of iterators that represent the range of purchases
         //that have the member ID input
 
 private:
     map<int, member> memberByIDMap;
     map<string, member> memberByNameMap;
-    multimap<date, purchase> purchaseByDateMap;
+    multimap<date, purchase, datecomp> purchaseByDateMap;
     multimap<int, purchase> purchaseByIDMap;
 };
 

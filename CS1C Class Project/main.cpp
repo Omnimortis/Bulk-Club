@@ -13,6 +13,7 @@
 #include <vector>
 #include <iterator>
 #include <limits>
+#include <map>
 #include "RuntimeException.h"
 using namespace std;
 
@@ -28,20 +29,61 @@ enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
 		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,
 		EXIT};
 
+struct datecomp {
+    bool operator () (const date& lhs, const date& rhs) const
+    {
+        bool rtn;
+
+        if (lhs.getYear() == rhs.getYear())
+        {
+            if (lhs.getMonth() == rhs.getMonth())
+            {
+                rtn = lhs.getDay() < rhs.getDay();
+            }
+            else
+            {
+                rtn = lhs.getMonth() < rhs.getMonth();
+            }
+        }
+        else
+        {
+            rtn = lhs.getYear() < rhs.getYear();
+        }
+
+        return rtn;
+    }
+};
+
 int main()
 {
     member m;
-
-    cout << m.toString() << "\n";
-
     string name = "Matt";
-
     date d(1, 21, 2001);
 
     member m1(name, 11111, true, d, 1000, 100);
-
-    cout << m1.toString() << "\n";
+    string item = "Milk";
+    purchase p1(item, 3, 3.50, m1, 2, 22, 2003);
+    string item2 = "Butter";
+    purchase p2(item2, 3, 3.50, m1, 2, 22, 2003);
     
+    multimap<date, purchase, datecomp> map1;
+
+    map1.insert(pair<date, purchase>(p1.getDate(), p1));
+    map1.insert(pair<date, purchase>(p2.getDate(), p2));
+
+    date dd(2, 22, 2003);
+
+    pair <multimap<date, purchase>::iterator,
+    multimap<date, purchase>::iterator> ret;
+
+    ret = map1.equal_range(dd);
+
+    cout << dd.toString() << " =>";
+
+    for (multimap<date, purchase>::iterator it=ret.first; it!=ret.second; ++it)
+      cout << ' ' << it->second.getItemName();
+
+
 #if INTERFACE
 	int menuChoice;
 	int filterType;

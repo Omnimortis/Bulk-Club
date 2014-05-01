@@ -29,15 +29,15 @@ public:
 
 	 void setDay(int dayInput);
 
-	 void getDay(int& dayOutput) const;
+	 int getDay() const;
 
 	 void setMonth(int monthInput);
 
-	 void getMonth(int& monthOutput) const;
+	 int getMonth() const;
 
 	 void setYear(int yearInput);
 
-	 void getYear(int& yearOutput) const;
+	 int getYear() const;
 
 	 //to string function for printing date
 	 string toString() const;
