@@ -25,7 +25,6 @@ public:
 
 	purchase(string nameInit, int quantityInit, float totalInit,
 			member& memberInit, int monthInit, int dayInit,
-
 			int yearInit);
 
 	void setDate(int month, int day, int year);

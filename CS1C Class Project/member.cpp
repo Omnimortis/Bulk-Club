@@ -16,15 +16,19 @@ member::member()
     amtSpent = 0;
     rebateAmt = 0;
 }
-
+//purchase::purchase(string nameInit, int quantityInit,float totalInit,
+//		member& memberInit, int monthInit, int dayInit,
+//		int yearInit):
+//		        itemName(nameInit), quantity(quantityInit),
+//		        totalAmount(totalInit), bulkMember(&memberInit),
+//		        purchaseDate(monthInit, dayInit, yearInit)
 member::member(string& initName, int initID, bool initType,
-        date& initExpDate, int initAmtSpent, int initRebateAmt)
+       int monthInit, int dayInit, int yearInit,  int initAmtSpent, int initRebateAmt): expDate(monthInit, dayInit, yearInit)
 {
     name = initName;
     id = initID;
     type = initType;
-    expDate = initExpDate;
-    amtSpent = initAmtSpent;
+      amtSpent = initAmtSpent;
     rebateAmt = initRebateAmt;
 }
 
@@ -58,9 +62,9 @@ bool member::getType() const
     return type;
 }
 
-void member::setExpDate(date& input)
+void member::setExpDate(int monthInit, int dayInit, int yearInit)
 {
-    expDate = input;
+    expDate.setDate(monthInit, dayInit, yearInit);
 }
 
 date member::getExpDate() const

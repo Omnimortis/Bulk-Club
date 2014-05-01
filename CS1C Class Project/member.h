@@ -22,7 +22,7 @@ public:
     member();
         //default constructor
 
-    member(string& initName, int initID, bool initType, date& initExpDate,
+    member(string& initName, int initID, bool initType,   int monthInit, int dayInit, int yearInit,
             int initAmtSpent, int initRebateAmt);
         //non-default constructor
 
@@ -47,7 +47,7 @@ public:
     bool getType() const;
         //return the member type
 
-    void setExpDate(date& input);
+    void setExpDate(int monthInit, int dayInit, int yearInit);
         //set the member expiration date
         //Post: member is changed and expDate is set to input
 

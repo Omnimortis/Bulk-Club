@@ -37,9 +37,9 @@ int main()
 
     string name = "Matt";
 
-    date d(1, 21, 2001);
+  //  date d(1, 21, 2001);
 
-    member m1(name, 11111, true, d, 1000, 100);
+    member m1(name, 11111, true, 1, 21, 2001, 1000, 100);
 
 
     purchase testPur("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101 );
@@ -195,9 +195,9 @@ void initializeMembers(const char *filename )
 		{
 			for(int i=0; i <=4; i++)
 			{
-				temp = new member();
 
-				//getline(iFile, temp->);
+				//temp = new member();
+
 			}
 		}
 
