@@ -27,7 +27,7 @@ void database::removeMember(int memberID)
     memberByNameMap.erase(memberName);
 }//end removeMember function
 
-void database::removeMember(string& memberName)
+void database::removeMember(string memberName)
 {
     int memberID = memberByNameMap[memberName].getID();
 
@@ -40,7 +40,7 @@ member& database::findMember(int memberID)
     return memberByIDMap[memberID];
 }//end findMember function
 
-member& database::findMember(string& memberName)
+member& database::findMember(string memberName)
 {
     return memberByNameMap[memberName];
 }//end findMember function

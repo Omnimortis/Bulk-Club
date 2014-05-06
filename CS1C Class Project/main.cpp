@@ -16,6 +16,7 @@
 #include <map>
 #include <fstream>
 #include "RuntimeException.h"
+#include "database.h"
 using namespace std;
 
 #define INTERFACE 0
@@ -30,74 +31,91 @@ enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
 		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,
 		EXIT};
 
-struct datecomp {
-    bool operator () (const date& lhs, const date& rhs) const
-    {
-        bool rtn;
-
-        if (lhs.getYear() == rhs.getYear())
-        {
-            if (lhs.getMonth() == rhs.getMonth())
-            {
-                rtn = lhs.getDay() < rhs.getDay();
-            }
-            else
-            {
-                rtn = lhs.getMonth() < rhs.getMonth();
-            }
-        }
-        else
-        {
-            rtn = lhs.getYear() < rhs.getYear();
-        }
-
-        return rtn;
-    }
-};
-
 int main()
 {
-    member m;
-    string name = "Matt";
+//    member m;
+//    string name = "Matt";
+//  //  date d(1, 21, 2001);
+//
+//    member m1(name, 11111, true, 1, 21, 2001, 1000, 100);
+//
+//    string item = "Milk";
+//    purchase p1(item, 3, 3.50, m1, 2, 22, 2003);
+//    string item2 = "Butter";
+//    purchase p2(item2, 3, 3.50, m1, 2, 22, 2003);
+//
+//
+//
+//    purchase testPur("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101 );
+//
+//
+//    cout << testPur.toString();
+//   // cout << m1.toString() << "\n";
+//
+//
+//
+//    multimap<date, purchase, datecomp> map1;
+//
+//    map1.insert(pair<date, purchase>(p1.getDate(), p1));
+//    map1.insert(pair<date, purchase>(p2.getDate(), p2));
+//
+//    date dd(2, 22, 2003);
+//
+//    pair <multimap<date, purchase>::iterator,
+//    multimap<date, purchase>::iterator> ret;
+//
+//    ret = map1.equal_range(dd);
+//
+//    cout << dd.toString() << " =>";
+//
+//    for (multimap<date, purchase>::iterator it=ret.first; it!=ret.second; ++it)
+//      cout << ' ' << it->second.getItemName();
+//
+//
+//
+//    cout << endl << (testPur.getMember())->getType();
 
+    database d;
 
-    member m1(name, 11111, true, 1, 21, 2001, 1000, 100);
+    member m1("Matt", 11111, true, 1, 21, 2001, 1000, 100);
+    member m2("Nate", 21331, false, 8, 21, 2008, 100, 0);
+    member m3("Bob", 01231, false, 1, 1, 1991, 1500, 0);
 
-    string item = "Milk";
-    purchase p1(item, 3, 3.50, m1, 2, 22, 2003);
-    string item2 = "Butter";
-    purchase p2(item2, 3, 3.50, m1, 2, 22, 2003);
+    purchase p1("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101);
+    purchase p2("Milk", 2, 4.65, m3, 10, 23, 2013);
+    purchase p3("Warlords of Draenor Preorder", 3, 120, m2, 1, 23, 2014);
+    purchase p4("Case of Red Bull", 2, 10, m2, 1, 23, 2014);
 
+    d.addMember(m1);
+    d.addMember(m3);
+    d.addMember(m2);
 
+    d.addPurchase(p1);
+    d.addPurchase(p2);
+    d.addPurchase(p3);
 
-    purchase testPur("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101 );
+    date day(1, 23, 2014);
 
+    cout << "Find member with ID 11111:\n" << d.findMember(11111).toString() << endl;
+    cout << "Find member with name 'Nate':\n" << d.findMember("Nate").toString() << endl;
 
- //  cout << testPur.toString();
-   // cout << m1.toString() << "\n";
+    cout << "Find purchases made my member with ID 11111:" << endl;
+    for (multimap<int, purchase>::iterator it = d.getPurchases(11111).first; it != d.getPurchases(11111).second; ++it)
+          cout << it->second.toString() << endl << endl;
 
-    
+    cout << "Find purchases made my member with ID 21331:" << endl;
+//    for (multimap<date, purchase>::iterator it = d.getPurchases(day).first; it != d.getPurchases(day).second; ++it)
+//          cout << it->second.toString() << endl << endl;
 
-    multimap<date, purchase, datecomp> map1;
+        pair <multimap<date, purchase>::iterator,
+        multimap<date, purchase>::iterator> ret;
 
-    map1.insert(pair<date, purchase>(p1.getDate(), p1));
-    map1.insert(pair<date, purchase>(p2.getDate(), p2));
+        ret = d.getPurchases(day);
 
-    date dd(2, 22, 2003);
+        cout << day.toString() << " =>";
 
-    pair <multimap<date, purchase>::iterator,
-    multimap<date, purchase>::iterator> ret;
-
-    ret = map1.equal_range(dd);
-
-    cout << dd.toString() << " =>";
-
-    for (multimap<date, purchase>::iterator it=ret.first; it!=ret.second; ++it)
-      cout << ' ' << it->second.getItemName();
-
-
-
-    cout << endl << (testPur.getMember())->getType();
+        for (multimap<date, purchase>::iterator it=ret.first; it!=ret.second; ++it)
+          cout << ' ' << it->second.getItemName();
 
 
 #if INTERFACE
@@ -234,35 +252,18 @@ int main()
 
 void initializeMembers(const char *filename )
 {
+	vector<member> memTest;
 	ifstream iFile; // INPUT - input file stream variable
 	iFile.open(filename);
-//
-//	int month; 	// integer month value
-//	int day;	// integer day value
-//	int year;	// integer year value
 
-	member tempMember;
-	int temp;
- string tempString;
+	member* temp;
 
 		while(iFile)
 		{
 			for(int i=0; i <=4; i++)
 			{
-				getline(iFile, tempString);
 
-
-
-					// PROCESSING - extracts month, day and year from stringstream
-					stringstream(tempString.substr(0,2)) >> temp;
-					tempMember.hireDate.setMonth(month);
-
-					stringstream(tempString.substr(3,4)) >> temp;
-					hireDate.setDay(day);
-
-					stringstream(tempString.substr(6, dateSet.length()-1)) >> temp;
-					hireDate.setYear(year);
-
+				//temp = new member();
 
 			}
 		}
