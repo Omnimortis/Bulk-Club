@@ -52,14 +52,14 @@ public:
         //remove the member with the id memberID
         //Post: database is changed and the specified member is removed
 
-    void removeMember(string& memberName);
+    void removeMember(string memberName);
         //remove the member with the name memberName
         //Post database is changed and the specified member is removed
 
     member& findMember(int memberID);
         //returns the member with the id memberID
 
-    member& findMember(string& memberName);
+    member& findMember(string memberName);
         //returns the member with the name memberName
 
     void addPurchase(purchase& input);
