@@ -33,48 +33,6 @@ enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
 
 int main()
 {
-//    member m;
-//    string name = "Matt";
-//  //  date d(1, 21, 2001);
-//
-//    member m1(name, 11111, true, 1, 21, 2001, 1000, 100);
-//
-//    string item = "Milk";
-//    purchase p1(item, 3, 3.50, m1, 2, 22, 2003);
-//    string item2 = "Butter";
-//    purchase p2(item2, 3, 3.50, m1, 2, 22, 2003);
-//
-//
-//
-//    purchase testPur("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101 );
-//
-//
-//    cout << testPur.toString();
-//   // cout << m1.toString() << "\n";
-//
-//
-//
-//    multimap<date, purchase, datecomp> map1;
-//
-//    map1.insert(pair<date, purchase>(p1.getDate(), p1));
-//    map1.insert(pair<date, purchase>(p2.getDate(), p2));
-//
-//    date dd(2, 22, 2003);
-//
-//    pair <multimap<date, purchase>::iterator,
-//    multimap<date, purchase>::iterator> ret;
-//
-//    ret = map1.equal_range(dd);
-//
-//    cout << dd.toString() << " =>";
-//
-//    for (multimap<date, purchase>::iterator it=ret.first; it!=ret.second; ++it)
-//      cout << ' ' << it->second.getItemName();
-//
-//
-//
-//    cout << endl << (testPur.getMember())->getType();
-
     database d;
 
     member m1("Matt", 11111, true, 1, 21, 2001, 1000, 100);
@@ -93,6 +51,7 @@ int main()
     d.addPurchase(p1);
     d.addPurchase(p2);
     d.addPurchase(p3);
+    d.addPurchase(p4);
 
     date day(1, 23, 2014);
 
@@ -104,18 +63,18 @@ int main()
           cout << it->second.toString() << endl << endl;
 
     cout << "Find purchases made my member with ID 21331:" << endl;
-//    for (multimap<date, purchase>::iterator it = d.getPurchases(day).first; it != d.getPurchases(day).second; ++it)
-//          cout << it->second.toString() << endl << endl;
 
-        pair <multimap<date, purchase>::iterator,
-        multimap<date, purchase>::iterator> ret;
+    pair <multimap<date, purchase>::iterator,
+    multimap<date, purchase>::iterator> ret2;
 
-        ret = d.getPurchases(day);
+    ret2 = d.getPurchases(day);
 
-        cout << day.toString() << " =>";
+    multimap<date, purchase>::iterator it2=ret2.first;
 
-        for (multimap<date, purchase>::iterator it=ret.first; it!=ret.second; ++it)
-          cout << ' ' << it->second.getItemName();
+    while (it2 != ret2.second){
+        cout << endl << it2->second.toString();
+        it2++;
+    }
 
 
 #if INTERFACE
