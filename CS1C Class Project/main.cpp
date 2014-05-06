@@ -59,7 +59,7 @@ int main()
 {
     member m;
     string name = "Matt";
-  //  date d(1, 21, 2001);
+
 
     member m1(name, 11111, true, 1, 21, 2001, 1000, 100);
 
@@ -73,7 +73,7 @@ int main()
     purchase testPur("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101 );
 
 
-    cout << testPur.toString();
+ //  cout << testPur.toString();
    // cout << m1.toString() << "\n";
 
     
@@ -234,18 +234,35 @@ int main()
 
 void initializeMembers(const char *filename )
 {
-	vector<member> memTest;
 	ifstream iFile; // INPUT - input file stream variable
 	iFile.open(filename);
+//
+//	int month; 	// integer month value
+//	int day;	// integer day value
+//	int year;	// integer year value
 
-	member* temp;
+	member tempMember;
+	int temp;
+ string tempString;
 
 		while(iFile)
 		{
 			for(int i=0; i <=4; i++)
 			{
+				getline(iFile, tempString);
 
-				//temp = new member();
+
+
+					// PROCESSING - extracts month, day and year from stringstream
+					stringstream(tempString.substr(0,2)) >> temp;
+					tempMember.hireDate.setMonth(month);
+
+					stringstream(tempString.substr(3,4)) >> temp;
+					hireDate.setDay(day);
+
+					stringstream(tempString.substr(6, dateSet.length()-1)) >> temp;
+					hireDate.setYear(year);
+
 
 			}
 		}
