@@ -16,23 +16,19 @@ member::member()
     amtSpent = 0;
     rebateAmt = 0;
 }
-//purchase::purchase(string nameInit, int quantityInit,float totalInit,
-//		member& memberInit, int monthInit, int dayInit,
-//		int yearInit):
-//		        itemName(nameInit), quantity(quantityInit),
-//		        totalAmount(totalInit), bulkMember(&memberInit),
-//		        purchaseDate(monthInit, dayInit, yearInit)
-member::member(string& initName, int initID, bool initType,
-       int monthInit, int dayInit, int yearInit,  int initAmtSpent, int initRebateAmt): expDate(monthInit, dayInit, yearInit)
+
+member::member(string initName, int initID, bool initType, int monthInit,
+		int dayInit, int yearInit,  int initAmtSpent, int initRebateAmt):
+				expDate(monthInit, dayInit, yearInit)
 {
     name = initName;
     id = initID;
     type = initType;
-      amtSpent = initAmtSpent;
+    amtSpent = initAmtSpent;
     rebateAmt = initRebateAmt;
 }
 
-void member::setName(string& input)
+void member::setName(string input)
 {
     name = input;
 }

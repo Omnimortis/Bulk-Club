@@ -22,11 +22,11 @@ public:
     member();
         //default constructor
 
-    member(string& initName, int initID, bool initType,   int monthInit, int dayInit, int yearInit,
-            int initAmtSpent, int initRebateAmt);
+    member(string initName, int initID, bool initType, int monthInit,
+    	   int dayInit, int yearInit, int initAmtSpent, int initRebateAmt);
         //non-default constructor
 
-    void setName(string& input);
+    void setName(string input);
         //set the name
         //Post: member is changed and name is set to input
 

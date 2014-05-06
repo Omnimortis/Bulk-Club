@@ -8,7 +8,6 @@
 #ifndef DATE_H_
 #define DATE_H_
 
-#include <iostream>
 #include <string>
 #include <sstream>
 using namespace std;
