@@ -81,7 +81,7 @@ string purchase::toString()
 
 	// PROCESSING - data members are added to string stream with various set
 	//				widths for formatted output
-	ss << left << "Purchase Date: " <<  purchaseDate.toString() << endl
+	ss << "Purchase Date: " <<  purchaseDate.toString() << endl
 	   << "Item Name: " << itemName << endl
 	   << "Quantity Sold: " << quantity << endl
 	   << "Total Amount: " << totalAmount << endl
@@ -92,7 +92,7 @@ string purchase::toString()
 	    else
 	        ss << "Basic";
 
-	ss << right;
+	ss << endl;
 
 	// PROCESSING - string stream variable is converted to string and returned
 	return ss.str();
