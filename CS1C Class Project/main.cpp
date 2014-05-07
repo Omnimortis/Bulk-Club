@@ -34,72 +34,66 @@ enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
 
 int main()
 {
-    database d;
+	database d;
 
-    MemberRead(d);
-    PurchaseRead(d);
+	MemberRead(d);
+	PurchaseRead(d);
 
-
-
-     for (multimap<int,purchase>::iterator it= d.getPurchases(12899).first; it!= d.getPurchases(12899).second; ++it)
-    	 std::cout << it->second.toString()  << "--------------------------" << endl;
-
-
-       //cout << "Find member with name 'Kathy Havealotsofkids':\n" << d.findMember("Kathy Havealotsofkids").toString() << endl;
-
+	for (multimap<int,purchase>::iterator it= d.getPurchases(12899).first; it!= d.getPurchases(12899).second; ++it)
+		std::cout << it->second.toString()  << "--------------------------" << endl;
 //
-//    member m1("Matt", 11111, true, 1, 21, 2001, 1000, 100);
-//    member m2("Nate", 21331, false, 8, 21, 2008, 100, 0);
-//    member m3("Bob", 01231, false, 1, 1, 1991, 1500, 0);
+//	cout << "Find member with name 'Kathy Havealotsofkids':\n" << d.findMember("Kathy Havealotsofkids").toString() << endl;
 //
-//    purchase p1("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101);
-//    purchase p2("Milk", 2, 4.65, m3, 10, 23, 2013);
-//    purchase p3("Warlords of Draenor Preorder", 3, 120, m2, 1, 23, 2014);
-//    purchase p4("Case of Red Bull", 2, 10, m2, 1, 23, 2014);
+//	member m1("Matt", 11111, true, 1, 21, 2001, 1000, 100);
+//	member m2("Nate", 21331, false, 8, 21, 2008, 100, 0);
+//	member m3("Bob", 01231, false, 1, 1, 1991, 1500, 0);
 //
-//    d.addMember(m1);
-//    d.addMember(m3);
-//    d.addMember(m2);
+//	purchase p1("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101);
+//	purchase p2("Milk", 2, 4.65, m3, 10, 23, 2013);
+//	purchase p3("Warlords of Draenor Preorder", 3, 120, m2, 1, 23, 2014);
+//	purchase p4("Case of Red Bull", 2, 10, m2, 1, 23, 2014);
 //
-//    d.addPurchase(p1);
-//    d.addPurchase(p2);
-//    d.addPurchase(p3);
-//    d.addPurchase(p4);
+//	d.addMember(m1);
+//	d.addMember(m3);
+//	d.addMember(m2);
 //
-//    date day(1, 23, 2014);
+//	d.addPurchase(p1);
+//	d.addPurchase(p2);
+//	d.addPurchase(p3);
+//	d.addPurchase(p4);
 //
-//    cout << "Find member with ID 11111:\n" << d.findMember(11111).toString() << endl;
- //   cout << "Find member with name 'Kathy Havealotsofkids':\n" << d.findMember("Kathy Havealotsofkids").toString() << endl;
+//	date day(1, 23, 2014);
 //
-//    cout << "Find purchases made my member with ID 11111:" << endl;
-//    for (multimap<int, purchase>::iterator it = d.getPurchases(11111).first; it != d.getPurchases(11111).second; ++it)
-//          cout << it->second.toString() << endl << endl;
+//	cout << "Find member with ID 11111:\n" << d.findMember(11111).toString() << endl;
+//	cout << "Find member with name 'Kathy Havealotsofkids':\n" << d.findMember("Kathy Havealotsofkids").toString() << endl;
 //
-//    cout << "Find purchases made my member with ID 21331:" << endl;
+//	cout << "Find purchases made my member with ID 11111:" << endl;
+//	for (multimap<int, purchase>::iterator it = d.getPurchases(11111).first; it != d.getPurchases(11111).second; ++it)
+//		cout << it->second.toString() << endl << endl;
 //
-//    pair <multimap<date, purchase>::iterator,
-//    multimap<date, purchase>::iterator> ret2;
+//	cout << "Find purchases made my member with ID 21331:" << endl;
 //
-//    ret2 = d.getPurchases(day);
+//	pair <multimap<date, purchase>::iterator,
+//	multimap<date, purchase>::iterator> ret2;
 //
-//    multimap<date, purchase>::iterator it2=ret2.first;
+//	ret2 = d.getPurchases(day);
 //
-//    while (it2 != ret2.second){
-//        cout << endl << it2->second.toString();
-//        it2++;
+//	multimap<date, purchase>::iterator it2=ret2.first;
 //
-//    }
+//	while (it2 != ret2.second){
+//		cout << endl << it2->second.toString();
+//		it2++;
 //
-// cout << "From here" << endl;
+//	}
 //
-//    for (multimap<int,purchase>::iterator it= d.getPurchases(21331).first; it!= d.getPurchases(21331).second; ++it)
-//           std::cout << ' ' << it->second.toString();
+//	cout << "From here" << endl;
 //
-//    cout << endl << "SECOND member" << endl;
-//     for (multimap<int,purchase>::iterator it= d.getPurchases(66666).first; it!= d.getPurchases(66666).second; ++it)
-//           std::cout << ' ' << it->second.toString();
+//	for (multimap<int,purchase>::iterator it= d.getPurchases(21331).first; it!= d.getPurchases(21331).second; ++it)
+//		std::cout << ' ' << it->second.toString();
 //
-
+//	cout << endl << "SECOND member" << endl;
+//	for (multimap<int,purchase>::iterator it= d.getPurchases(66666).first; it!= d.getPurchases(66666).second; ++it)
+//		std::cout << ' ' << it->second.toString();
 
 
 #if INTERFACE
@@ -234,9 +228,6 @@ int main()
 	return 0;
 }
 
-
-
-
 int validInt(int lowerB, int upperB)
 {
 	string input;
@@ -270,13 +261,10 @@ int getReportType(const vector<const char*> &)
 
 void MemberRead(database& d)
 {
-
 	ifstream iFile; // INPUT - input stream variable
 	string memberName, memTypeStr, dateStr;
 	bool memTypeBool;
 	int month, day, year, memberNum;
-
-
 
 	// PROCESSING - Associates file name with input stream variable
 	iFile.open("warehouse shopper.txt");
@@ -308,10 +296,9 @@ void MemberRead(database& d)
 
 		d.addMember(temp);
 	}
+
 	iFile.close();
-
 }
-
 
 void PurchaseRead(database& d)
 {
@@ -322,7 +309,6 @@ void PurchaseRead(database& d)
 
 	// PROCESSING - Associates file name with input stream variable
 	iFile.open("purchaseFile.txt");
-
 
 	while(iFile)
 	{
@@ -338,21 +324,12 @@ void PurchaseRead(database& d)
 
 		iFile >> unitPrice;
 
-
 		iFile >> quantity;
 		iFile.ignore(1000, '\n');
 
 		purchase temp(itemName, quantity, (quantity*unitPrice), d.findMember(memNum), month, day, year);
 		d.addPurchase(temp);
-
-
 	}
 
 	iFile.close();
 }
-
-
-
-
-
-
