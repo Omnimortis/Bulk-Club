@@ -19,7 +19,7 @@
 #include "database.h"
 using namespace std;
 
-#define INTERFACE 0
+#define INTERFACE 1
 
 void MemberRead(database& d);
 void PurchaseRead(database& d);
@@ -34,74 +34,35 @@ enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
 
 int main()
 {
-	database d;
+	database db;
 
-	MemberRead(d);
-	PurchaseRead(d);
+	MemberRead(db);
+	PurchaseRead(db);
 
-	for (multimap<int,purchase>::iterator it= d.getPurchases(12899).first; it!= d.getPurchases(12899).second; ++it)
-		std::cout << it->second.toString()  << "--------------------------" << endl;
-//
-//	cout << "Find member with name 'Kathy Havealotsofkids':\n" << d.findMember("Kathy Havealotsofkids").toString() << endl;
-//
-//	member m1("Matt", 11111, true, 1, 21, 2001, 1000, 100);
-//	member m2("Nate", 21331, false, 8, 21, 2008, 100, 0);
-//	member m3("Bob", 01231, false, 1, 1, 1991, 1500, 0);
-//
-//	purchase p1("50lbs of Butter", 10, 101.65, m1, 10, 23, 2101);
-//	purchase p2("Milk", 2, 4.65, m3, 10, 23, 2013);
-//	purchase p3("Warlords of Draenor Preorder", 3, 120, m2, 1, 23, 2014);
-//	purchase p4("Case of Red Bull", 2, 10, m2, 1, 23, 2014);
-//
-//	d.addMember(m1);
-//	d.addMember(m3);
-//	d.addMember(m2);
-//
-//	d.addPurchase(p1);
-//	d.addPurchase(p2);
-//	d.addPurchase(p3);
-//	d.addPurchase(p4);
-//
-//	date day(1, 23, 2014);
-//
-//	cout << "Find member with ID 11111:\n" << d.findMember(11111).toString() << endl;
-//	cout << "Find member with name 'Kathy Havealotsofkids':\n" << d.findMember("Kathy Havealotsofkids").toString() << endl;
-//
-//	cout << "Find purchases made my member with ID 11111:" << endl;
-//	for (multimap<int, purchase>::iterator it = d.getPurchases(11111).first; it != d.getPurchases(11111).second; ++it)
-//		cout << it->second.toString() << endl << endl;
-//
-//	cout << "Find purchases made my member with ID 21331:" << endl;
-//
-//	pair <multimap<date, purchase>::iterator,
-//	multimap<date, purchase>::iterator> ret2;
-//
-//	ret2 = d.getPurchases(day);
-//
-//	multimap<date, purchase>::iterator it2=ret2.first;
-//
-//	while (it2 != ret2.second){
-//		cout << endl << it2->second.toString();
-//		it2++;
-//
-//	}
-//
-//	cout << "From here" << endl;
-//
-//	for (multimap<int,purchase>::iterator it= d.getPurchases(21331).first; it!= d.getPurchases(21331).second; ++it)
-//		std::cout << ' ' << it->second.toString();
-//
-//	cout << endl << "SECOND member" << endl;
-//	for (multimap<int,purchase>::iterator it= d.getPurchases(66666).first; it!= d.getPurchases(66666).second; ++it)
-//		std::cout << ' ' << it->second.toString();
+//	for (multimap<int,purchase>::iterator it =
+//	        db.getPurchases(12899).first;
+//	        it!= db.getPurchases(12899).second; ++it)
+//		std::cout << it->second.toString()
+//		<< "--------------------------" << endl;
+
+//    for (multimap<date,purchase>::iterator it =
+//            db.getPurchases(d).first;
+//            it!= db.getPurchases(d).second; ++it)
+//    {
+//        cout << it->second.toString();
+//        cout << "------------------------------------" << endl;
+//    }
 
 
 #if INTERFACE
 	int menuChoice;
 	int filterType;
+	int month;
+	int day;
+	int year;
+	date tempDate;
 	
     vector<const char*> menuOptions;
-
     menuOptions.push_back("View Purchases for given day");
     menuOptions.push_back("View Purchases for given item");
     menuOptions.push_back("View Purchases for given member");
@@ -116,13 +77,11 @@ int main()
     menuOptions.push_back("Exit");
 
 	vector<const char*> reportType;
-
     reportType.push_back("Basic Members Only");
     reportType.push_back("Preferred Members Only");
     reportType.push_back("All members");
 
     vector<const char*> modifyType;
-
     modifyType.push_back("Add");
     modifyType.push_back("Delete");
     modifyType.push_back("Modify");
@@ -165,14 +124,35 @@ int main()
 				&& menuChoice !=EXIT )
 		{
 			filterType = getReportType(reportType);
-            cout << reportType[(filterType - 1)]
+            cout << endl << reportType[(filterType - 1)]
                  << endl << endl;
 		}
 
 		switch(menuChoice)
 		{
 			case PURCHASE_BY_DAY:
-				cout << "Please choose day to view sales report for";
+				cout << "Enter the date for the sales report:\n";
+				cout << "Enter month: ";
+				month = validInt(1, 12);
+				cout << "Enter day: ";
+				day = validInt(1, 31);
+				cout << "Enter year: ";
+				year = validInt(1950, 2014);
+				tempDate.setDay(day);
+				tempDate.setMonth(month);
+				tempDate.setYear(year);
+				cout << "\nPurchases for " << tempDate.toString() << ":"
+				        << endl;
+				cout << "------------------------------------\n";
+
+			    for (multimap<date,purchase>::iterator it =
+			            db.getPurchases(tempDate).first;
+			            it!= db.getPurchases(tempDate).second; ++it)
+			    {
+			        cout << it->second.toString();
+			        cout << "------------------------------------" << endl;
+			    }
+
 				break;
 			case PURCHASE_BY_ITEM:
 				cout << "Enter Item Name: ";
