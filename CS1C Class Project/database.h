@@ -13,31 +13,6 @@
 #include "member.h"
 using namespace std;
 
-struct datecomp {
-    bool operator () (const date& lhs, const date& rhs) const
-    {
-        bool rtn;
-
-        if (lhs.getYear() == rhs.getYear())
-        {
-            if (lhs.getMonth() == rhs.getMonth())
-            {
-                rtn = lhs.getDay() < rhs.getDay();
-            }
-            else
-            {
-                rtn = lhs.getMonth() < rhs.getMonth();
-            }
-        }
-        else
-        {
-            rtn = lhs.getYear() < rhs.getYear();
-        }
-
-        return rtn;
-    }
-};
-
 class database
 {
 public:
@@ -66,6 +41,14 @@ public:
         //add a new purchase
         //Post: database is changed and input is added to maps
 
+    multimap<int, purchase>::iterator purchaseByIDBegin();
+        //returns an iterator that represents the beginning of the
+        //purchases sorted by member ID
+
+    multimap<int, purchase>::iterator purchaseByIDEnd();
+        //returns an iterator that represents the end of the purchases
+        //sorted by member ID
+
     purchase& getPurchase(multimap<date, purchase>::iterator& input);
         //returns the purchase represented by the iterator input
 
@@ -83,6 +66,31 @@ public:
         //that have the member ID input
 
 private:
+    struct datecomp {
+        bool operator () (const date& lhs, const date& rhs) const
+        {
+            bool rtn;
+
+            if (lhs.getYear() == rhs.getYear())
+            {
+                if (lhs.getMonth() == rhs.getMonth())
+                {
+                    rtn = lhs.getDay() < rhs.getDay();
+                }
+                else
+                {
+                    rtn = lhs.getMonth() < rhs.getMonth();
+                }
+            }
+            else
+            {
+                rtn = lhs.getYear() < rhs.getYear();
+            }
+
+            return rtn;
+        }
+    };
+
     map<int, member> memberByIDMap;
     map<string, member> memberByNameMap;
     multimap<date, purchase, datecomp> purchaseByDateMap;

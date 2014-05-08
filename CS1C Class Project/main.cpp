@@ -5,7 +5,7 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-#include "member.h"
+
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -15,6 +15,7 @@
 #include <limits>
 #include <map>
 #include <fstream>
+#include "member.h"
 #include "RuntimeException.h"
 #include "database.h"
 using namespace std;
@@ -25,6 +26,9 @@ void MemberRead(database& d);
 void PurchaseRead(database& d);
 int validInt(int, int);
 int getReportType(const vector<const char*> &);
+void printPurchases(database& db, date& day);
+void printPurchases(database& db, int id);
+void printPurchases(database& db, string name);
 
 const int maxWidth = 80;
 enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
@@ -39,21 +43,6 @@ int main()
 	MemberRead(db);
 	PurchaseRead(db);
 
-//	for (multimap<int,purchase>::iterator it =
-//	        db.getPurchases(12899).first;
-//	        it!= db.getPurchases(12899).second; ++it)
-//		std::cout << it->second.toString()
-//		<< "--------------------------" << endl;
-
-//    for (multimap<date,purchase>::iterator it =
-//            db.getPurchases(d).first;
-//            it!= db.getPurchases(d).second; ++it)
-//    {
-//        cout << it->second.toString();
-//        cout << "------------------------------------" << endl;
-//    }
-
-
 #if INTERFACE
 	int menuChoice;
 	int filterType;
@@ -61,6 +50,8 @@ int main()
 	int day;
 	int year;
 	date tempDate;
+	string name;
+	int id;
 	
     vector<const char*> menuOptions;
     menuOptions.push_back("View Purchases for given day");
@@ -141,30 +132,41 @@ int main()
 				tempDate.setDay(day);
 				tempDate.setMonth(month);
 				tempDate.setYear(year);
-				cout << "\nPurchases for " << tempDate.toString() << ":"
-				        << endl;
-				cout << "------------------------------------\n";
-
-			    for (multimap<date,purchase>::iterator it =
-			            db.getPurchases(tempDate).first;
-			            it!= db.getPurchases(tempDate).second; ++it)
-			    {
-			        cout << it->second.toString();
-			        cout << "------------------------------------" << endl;
-			    }
-
+				printPurchases(db, tempDate);
 				break;
 			case PURCHASE_BY_ITEM:
 				cout << "Enter Item Name: ";
 				break;
 			case PURCHASE_BY_MEMBER:
-				cout << "Search by Member Name or Number?";
+				cout << "Search by Member Name or Number?\n";
 				cout << "1. Member Name" << endl;
 				cout << "2. Member Number" << endl;
 				cout << "3. Exit" << endl;
+				cout << "\nPlease enter your choice: ";
+				menuChoice = validInt(1, 3);
+				if (menuChoice == 1)
+				{
+				    cout << "Enter the member name: ";
+				    getline(cin, name);
+				    printPurchases(db, name);
+				}
+				else if (menuChoice == 2)
+				{
+				    cout << "Enter the member number: ";
+				    printPurchases(db, validInt(0, 99999));
+				}
 				break;
 			case TOTAL_SALES:
-				cout << "Printing total sales";
+				cout << "Printing all sales sorted by member ID:" << endl;
+			    cout << "------------------------------------\n";
+
+			    for (multimap<int,purchase>::iterator it =
+			            db.purchaseByIDBegin();
+			            it!= db.purchaseByIDEnd(); ++it)
+			    {
+			        cout << it->second.toString();
+			        cout << "------------------------------------" << endl;
+			    }
 				break;
 			case QUANTATIES:
 				cout << "Printing quantities of items sold ";
@@ -194,8 +196,22 @@ int main()
                     cout << i+1 << ". "<< modifyType.at(i) << endl;
 				}
 
+				cout << "Please enter your choice: ";
 				menuChoice = validInt(1, 4);
-				cout << "You have chosen " << modifyType[menuChoice -1] << endl;
+				cout << "You have chosen " << modifyType[menuChoice -1]
+				     << endl;
+				switch (menuChoice)
+				{
+				case 1:
+				    cout << "Enter the name of the member you would like "
+				            "to add: ";
+				    getline(cin, name);
+				    cout << "Enter the ID of the member you would like to"
+				            " add: ";
+				    id = validInt(0, 99999);
+				    cout << "Is this a preferred member? (Yes or No): ";
+
+				}
 				break;
 			case EXIT:
 				cout << "Goodbye";
@@ -227,6 +243,53 @@ int validInt(int lowerB, int upperB)
 		cout << "Invalid Input, please try again: ";
 	}
 	return choice;
+}
+
+void printPurchases(database& db, date& day)
+{
+    cout << "\nPurchases for " << day.toString() << ":"
+            << endl;
+    cout << "------------------------------------\n";
+
+    for (multimap<date,purchase>::iterator it =
+            db.getPurchases(day).first;
+            it!= db.getPurchases(day).second; ++it)
+    {
+        cout << it->second.toString();
+        cout << "------------------------------------" << endl;
+    }
+}
+
+void printPurchases(database& db, int id)
+{
+    cout << "\nPurchases for member #" << id << " - "
+            << db.findMember(id).getName() << ":" << endl;
+    cout << "------------------------------------\n";
+
+    for (multimap<int,purchase>::iterator it =
+            db.getPurchases(id).first;
+            it!= db.getPurchases(id).second; ++it)
+    {
+        cout << it->second.toString();
+        cout << "------------------------------------" << endl;
+    }
+}
+
+void printPurchases(database& db, string name)
+{
+    int id = db.findMember(name).getID();
+
+    cout << "\nPurchases for " << name << " - "
+            << id << ":" << endl;
+    cout << "------------------------------------\n";
+
+    for (multimap<int,purchase>::iterator it =
+            db.getPurchases(id).first;
+            it!= db.getPurchases(id).second; ++it)
+    {
+        cout << it->second.toString();
+        cout << "------------------------------------" << endl;
+    }
 }
 
 int getReportType(const vector<const char*> &)

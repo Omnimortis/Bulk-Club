@@ -52,6 +52,16 @@ void database::addPurchase(purchase& input)
             input));
 }//end addPurchase function
 
+multimap<int, purchase>::iterator database::purchaseByIDBegin()
+{
+    return purchaseByIDMap.begin();
+}
+
+multimap<int, purchase>::iterator database::purchaseByIDEnd()
+{
+    return purchaseByIDMap.end();
+}
+
 purchase& database::getPurchase(multimap<date, purchase>::iterator& input)
 {
     return input->second;
