@@ -229,10 +229,10 @@ int main()
 	                cout << "Enter year: ";
 	                year = validInt(1950, 2014);
 	                
-	                member newMember(name, id, preferred, month, day,
-	                        year);
+	                //member newMember1(name, id, preferred, month, day,
+	                //        year);
 	                
-	                db.addMember(newMember);
+	                //db.addMember(newMember1);
 	                break;
 				case 2: //NOT TESTED
 				    cout << "Enter the member name or ID of the member you"
@@ -456,7 +456,7 @@ void MemberRead(database& d)
 		stringstream(dateStr.substr(3,4)) >> day;
 		stringstream(dateStr.substr(6,dateStr.length()-1)) >> year;
 
-		member temp(memberName, memberNum, memTypeBool, month, day, year, 0, 0);
+		member temp(memberName, memberNum, memTypeBool, month, day, year);
 
 		d.addMember(temp);
 	}
