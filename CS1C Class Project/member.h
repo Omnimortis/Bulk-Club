@@ -23,7 +23,7 @@ public:
         //default constructor
 
     member(string initName, int initID, bool initType, int monthInit,
-    	   int dayInit, int yearInit, int initAmtSpent, int initRebateAmt);
+    	   int dayInit, int yearInit);
         //non-default constructor
 
     void setName(string input);
