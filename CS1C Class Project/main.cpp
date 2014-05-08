@@ -29,6 +29,7 @@ int getReportType(const vector<const char*> &);
 void printPurchases(database& db, date& day);
 void printPurchases(database& db, int id);
 void printPurchases(database& db, string name);
+void PurchaseWrite(database& db);
 
 const int maxWidth = 80;
 enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
@@ -42,6 +43,8 @@ int main()
 
 	MemberRead(db);
 	PurchaseRead(db);
+
+
 
 #if INTERFACE
 	int menuChoice;
@@ -87,7 +90,8 @@ int main()
 		 << setw(2) << setfill(' ') <<""
 		 << left <<setfill('*')
 		 << setw(maxWidth/3)<< " |" << endl
-		 <<setfill('*')  << setw(maxWidth) <<"*" << endl << endl;
+		 <<setfill('*')  << setw(maxWidth) <<"*" << endl << setfill(' ')<< endl;
+
 
 	cout << "Welcome to the Bulk Club Manager Suite. " << endl;
 	cout << "What would you like to do?" << endl;
@@ -247,17 +251,49 @@ int validInt(int lowerB, int upperB)
 
 void printPurchases(database& db, date& day)
 {
+	int basicCount = 0, prefCount = 0;
+	float totalSales = 0;
     cout << "\nPurchases for " << day.toString() << ":"
             << endl;
-    cout << "------------------------------------\n";
-
+    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+    cout << "| " << setw(30) << "Item";
+    cout << "| " << setw(7) << "Unit";
+    cout << "| " << setw(5) << "Qty";
+    cout << "| " << setw(22) << "Member Name";
+    cout << "| " << setw(7) << "ID";
+    cout << "| " << setw(10) << "Type";
+    cout << "| " << endl;
+    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
     for (multimap<date,purchase>::iterator it =
             db.getPurchases(day).first;
             it!= db.getPurchases(day).second; ++it)
     {
-        cout << it->second.toString();
-        cout << "------------------------------------" << endl;
+       	cout << "| " << setw(30) <<  it->second.getItemName();
+       	cout << "|$" << setw(7) << (it->second.getTotalAmount())/ (it->second.getQuantity());
+    	cout << "| " << setw(5) << it->second.getQuantity();
+    	cout << "| " << setw(22) << (it->second.getMember())->getName();
+    	cout << "| " << setw(7) << (it->second.getMember())->getID();
+    	cout << "| " << setw(10);
+
+    	if (it->second.getMember()->getType())
+    	{
+    		cout << "Prefered";
+    		prefCount++;
+    	}
+    	else
+    	{
+    		cout << "Basic";
+    		basicCount++;
+    	}
+    	cout << "| " << endl;
+
+
+
+
     }
+    cout << endl;
+    cout << "Basic Shoppers: " << basicCount << endl;
+    cout << "Preferred Shoppers: " << prefCount << endl;
 }
 
 void printPurchases(database& db, int id)
@@ -342,6 +378,33 @@ void MemberRead(database& d)
 
 	iFile.close();
 }
+
+void PurchaseWrite(database& db)
+{
+	ofstream oFile;
+
+	oFile.open("pur2.txt");
+
+
+    for (multimap<int,purchase>::iterator it =
+            db.purchaseByIDBegin();
+            it!= db.purchaseByIDEnd(); ++it)
+    {
+    	oFile << setw(2) << setfill('0') << (it->second.getDate()).getMonth() <<"/";
+    	oFile << setw(2) << (it->second.getDate()).getDay() <<"/";
+    	oFile << setw(4) << (it->second.getDate()).getYear() << setfill(' ') << endl;
+    	oFile << (it->second.getMember())->getID() << endl;
+    	oFile << it->second.getItemName() << endl;
+    	oFile << (it->second.getTotalAmount())/(it->second.getQuantity()) << " ";
+    	oFile << it->second.getQuantity() << endl;
+    }
+
+    oFile.close();
+}
+
+
+
+
 
 void PurchaseRead(database& d)
 {
