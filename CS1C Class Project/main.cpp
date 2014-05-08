@@ -25,6 +25,7 @@ using namespace std;
 void MemberRead(database& d);
 void PurchaseRead(database& d);
 int validInt(int, int);
+bool validBool();
 int getReportType(const vector<const char*> &);
 void printPurchases(database& db, date& day);
 void printPurchases(database& db, int id);
@@ -52,9 +53,10 @@ int main()
 	int month;
 	int day;
 	int year;
-	date tempDate;
+	date newDate;
 	string name;
 	int id;
+	bool preferred;
 	
     vector<const char*> menuOptions;
     menuOptions.push_back("View Purchases for given day");
@@ -133,10 +135,10 @@ int main()
 				day = validInt(1, 31);
 				cout << "Enter year: ";
 				year = validInt(1950, 2014);
-				tempDate.setDay(day);
-				tempDate.setMonth(month);
-				tempDate.setYear(year);
-				printPurchases(db, tempDate);
+				newDate.setDay(day);
+				newDate.setMonth(month);
+				newDate.setYear(year);
+				printPurchases(db, newDate);
 				break;
 			case PURCHASE_BY_ITEM:
 				cout << "Enter Item Name: ";
@@ -210,11 +212,63 @@ int main()
 				    cout << "Enter the name of the member you would like "
 				            "to add: ";
 				    getline(cin, name);
+
 				    cout << "Enter the ID of the member you would like to"
 				            " add: ";
 				    id = validInt(0, 99999);
-				    cout << "Is this a preferred member? (Yes or No): ";
 
+				    cout << "Is this a preferred member? (Yes or No): ";
+				    preferred = validBool();
+
+				    cout << "Enter the date that the membership will "
+				            "expire:\n";
+	                cout << "Enter month: ";
+	                month = validInt(1, 12);
+	                cout << "Enter day: ";
+	                day = validInt(1, 31);
+	                cout << "Enter year: ";
+	                year = validInt(1950, 2014);
+	                
+	                member newMember(name, id, preferred, month, day,
+	                        year);
+	                
+	                db.addMember(newMember);
+	                break;
+				case 2: //NOT TESTED
+				    cout << "Enter the member name or ID of the member you"
+				            " want to delete";
+				    bool intInput;
+
+				    while (getline(cin, name))
+				    {
+				        stringstream ss(name);
+				        if (ss >> id)
+				        {
+				            if(ss.eof())
+				            {
+				                break;
+				                intInput = true;
+				            }
+				            else
+				            {
+		                        cout << "Invalid Input, please try again: ";
+				            }
+				        }
+				        else
+				        {
+				            break;
+				            intInput = false;
+				        }
+				    }
+
+				    if (intInput)
+				    {
+				        db.removeMember(id);
+				    }
+				    else
+				    {
+				        db.removeMember(name);
+				    }
 				}
 				break;
 			case EXIT:
@@ -247,6 +301,37 @@ int validInt(int lowerB, int upperB)
 		cout << "Invalid Input, please try again: ";
 	}
 	return choice;
+}
+
+bool validBool()
+{
+    char input;
+    bool choice;
+    bool invalid = true;
+
+    while (invalid)
+    {
+        cin.get(input);
+        cin.ignore(1000, '\n');
+        input = toupper(input);
+
+        if (input == 'Y')
+        {
+            choice = true;
+            invalid = false;
+        }
+        else if (input == 'F')
+        {
+            choice = false;
+            invalid = false;
+        }
+        else
+        {
+            cout << "Invalid input, try again: ";
+        }
+    }
+
+    return choice;
 }
 
 void printPurchases(database& db, date& day)

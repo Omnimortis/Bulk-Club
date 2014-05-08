@@ -18,14 +18,14 @@ member::member()
 }
 
 member::member(string initName, int initID, bool initType, int monthInit,
-		int dayInit, int yearInit,  int initAmtSpent, int initRebateAmt):
+		int dayInit, int yearInit):
 				expDate(monthInit, dayInit, yearInit)
 {
     name = initName;
     id = initID;
     type = initType;
-    amtSpent = initAmtSpent;
-    rebateAmt = initRebateAmt;
+    amtSpent = 0;
+    rebateAmt = 0;
 }
 
 void member::setName(string input)
