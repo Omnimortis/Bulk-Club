@@ -5,100 +5,77 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-#include "member.h"
+#include "basicMember.h"
 
-member::member()
+basicMember::basicMember()
 {
     name = "";
     id = 0;
     type = false;
-    expDate = date();
     amtSpent = 0;
-    rebateAmt = 0;
 }
 
-member::member(string initName, int initID, bool initType, int monthInit,
-		int dayInit, int yearInit):
+basicMember::basicMember(string initName, int initID, bool initType,
+		int monthInit, int dayInit, int yearInit):
 				expDate(monthInit, dayInit, yearInit)
 {
     name = initName;
     id = initID;
     type = initType;
     amtSpent = 0;
-    rebateAmt = 0;
 }
 
-void member::setName(string input)
+void basicMember::setName(string input)
 {
     name = input;
 }
 
-string member::getName() const
+string basicMember::getName() const
 {
     return name;
 }
 
-void member::setID(int input)
+void basicMember::setID(int input)
 {
     id = input;
 }
 
-int member::getID() const
+int basicMember::getID() const
 {
     return id;
 }
 
-void member::setType(bool input)
+void basicMember::setType(bool input)
 {
     type = input;
 }
 
-bool member::getType() const
+bool basicMember::getType() const
 {
     return type;
 }
 
-void member::setExpDate(int monthInit, int dayInit, int yearInit)
+void basicMember::setExpDate(int monthInit, int dayInit, int yearInit)
 {
     expDate.setDate(monthInit, dayInit, yearInit);
 }
 
-date member::getExpDate() const
+date basicMember::getExpDate() const
 {
     return expDate;
 }
 
-void member::setAmtSpent(int input)
+void basicMember::setAmtSpent(float input)
 {
     amtSpent = input;
 }
 
-int member::getAmtSpent() const
+float basicMember::getAmtSpent() const
 {
     return amtSpent;
 }
 
-void member::setRebateAmount(int input)
-{
-    rebateAmt = input;
-}
-
-int member::getRebateAmt() const
-{
-    return rebateAmt;
-}
-
-void member::addPurchase(purchase& input)
-{
-    purchases.push_back(input);
-}
-
-vector<purchase>& member::getPurchases()
-{
-    return purchases;
-}
-
-string member::toString() const
+string basicMember::toString() const
 {
     string rtn = "";
     string temp;
@@ -122,11 +99,6 @@ string member::toString() const
     convert << amtSpent;
     temp = convert.str();
     rtn += ("Total Amount Spent: $" + temp + "\n");
-    convert.str("");
-
-    convert << rebateAmt;
-    temp = convert.str();
-    rtn += ("Rebate Anount: $" + temp + "\n");
     convert.str("");
 
     return rtn;

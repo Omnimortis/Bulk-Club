@@ -5,24 +5,20 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-#ifndef MEMBER_H_
-#define MEMBER_H_
+#ifndef BASICMEMBER_H_
+#define BASICMEMBER_H_
 
 #include <string>
-#include <vector>
 #include "date.h"
-#include "purchase.h"
 using namespace std;
 
-class purchase;
-
-class member
+class basicMember
 {
 public:
-    member();
+    basicMember();
         //default constructor
 
-    member(string initName, int initID, bool initType, int monthInit,
+    basicMember(string initName, int initID, bool initType, int monthInit,
     	   int dayInit, int yearInit);
         //non-default constructor
 
@@ -54,26 +50,12 @@ public:
     date getExpDate() const;
         //return the member expiration date
 
-    void setAmtSpent(int input);
+    void setAmtSpent(float input);
         //set the member's amount spent
         //Post: member is changed and amtSpent is set to input
 
-    int getAmtSpent() const;
+    float getAmtSpent() const;
         //return the member's amount spent
-
-    void setRebateAmount(int input);
-        //set the member's rebate amount
-        //Post: member is changed and rebateAmount is set to input
-
-    int getRebateAmt() const;
-        //return the member's rebate amount
-
-    void addPurchase(purchase& input);
-        //add a new purchase to the vector of purchases
-        //Post: member is changed and input is inserted into purchases
-
-    vector<purchase>& getPurchases();
-        //return the vector of purchases that the member has made
 
     string toString() const;
         //return a string representation of the member
@@ -83,9 +65,7 @@ private:
     int id;
     bool type;
     date expDate;
-    int amtSpent;
-    int rebateAmt;
-    vector<purchase> purchases;
+    float amtSpent;
 };
 
-#endif /* MEMBER_H_ */
+#endif /* BASICMEMBER_H_ */

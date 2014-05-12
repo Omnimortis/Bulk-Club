@@ -8,16 +8,16 @@
 #include "purchase.h"
 
 purchase::purchase():
-                itemName(" "), quantity(0), totalAmount(0),
+                itemName(" "), quantity(0), unitPrice(0),
                 bulkMember(NULL)
 {
 }
 
-purchase::purchase(string nameInit, int quantityInit,float totalInit,
-		member& memberInit, int monthInit, int dayInit,
+purchase::purchase(string nameInit, int quantityInit,float priceInit,
+		basicMember& memberInit, int monthInit, int dayInit,
 		int yearInit):
 		        itemName(nameInit), quantity(quantityInit),
-		        totalAmount(totalInit), bulkMember(&memberInit),
+		        unitPrice(priceInit), bulkMember(&memberInit),
 		        purchaseDate(monthInit, dayInit, yearInit)
 {
 }
@@ -32,7 +32,7 @@ date& purchase::getDate()
 	return purchaseDate;
 }
 
-void purchase::setItemName(string& nameSet)
+void purchase::setItemName(string nameSet)
 {
 	itemName = nameSet;
 }
@@ -52,22 +52,22 @@ int purchase::getQuantity()
 	return quantity;
 }
 
-void purchase::setTotalAmount(float totalSet)
+void purchase::setUnitPrice(float priceSet)
 {
-	totalAmount = totalSet;
+	unitPrice = priceSet;
 }
 
-float purchase::getTotalAmount()
+float purchase::getUnitPrice()
 {
-	return totalAmount;
+	return unitPrice;
 }
 
-void purchase::setMember(member& member)
+void purchase::setMember(basicMember& member)
 {
 	bulkMember = &member;
 }
 
-member* purchase::getMember()
+basicMember* purchase::getMember()
 {
 	return bulkMember;
 
@@ -84,7 +84,7 @@ string purchase::toString()
 	ss << "Purchase Date: " <<  purchaseDate.toString() << endl
 	   << "Item Name: " << itemName << endl
 	   << "Quantity Sold: " << quantity << endl
-	   << "Total Amount: " << totalAmount << endl
+	   << "Total Amount: " << unitPrice << endl
 	   << "Member: " << bulkMember->getName() << " - " << bulkMember->getID() << endl
 	   << "Membership Type: " ;
 	   if (bulkMember->getType())

@@ -11,27 +11,27 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "date.h"
-#include "member.h"
 #include <iomanip>
+#include "date.h"
+#include "basicMember.h"
 using namespace std;
 
-class member;
+class basicMember;
 
 class purchase
 {
 public:
 	purchase();
 
-	purchase(string nameInit, int quantityInit, float totalInit,
-			member& memberInit, int monthInit, int dayInit,
+	purchase(string nameInit, int quantityInit, float priceInit,
+			basicMember& memberInit, int monthInit, int dayInit,
 			int yearInit);
 
 	void setDate(int month, int day, int year);
 
 	date& getDate();
 
-	void setItemName(string& nameSet);
+	void setItemName(string nameSet);
 
 	string getItemName();
 
@@ -39,21 +39,21 @@ public:
 
 	int getQuantity();
 
-	void setTotalAmount(float totalSet);
+	void setUnitPrice(float totalSet);
 
-	float getTotalAmount();
+	float getUnitPrice();
 
-	void setMember(member& member);
+	void setMember(basicMember& member);
 
-	member* getMember();
+	basicMember* getMember();
 
 	string toString();
 
 private:
 	string itemName;
 	int quantity;
-	float totalAmount;
-	member *bulkMember;
+	float unitPrice;
+	basicMember *bulkMember;
 	date purchaseDate;
 };
 

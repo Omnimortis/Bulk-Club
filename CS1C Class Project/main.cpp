@@ -15,9 +15,10 @@
 #include <limits>
 #include <map>
 #include <fstream>
-#include "member.h"
+#include "basicMember.h"
 #include "RuntimeException.h"
 #include "database.h"
+#include "purchase.h"
 using namespace std;
 
 #define INTERFACE 1
@@ -45,8 +46,6 @@ int main()
 	MemberRead(db);
 	PurchaseRead(db);
 
-
-
 #if INTERFACE
 	int menuChoice;
 	int filterType;
@@ -57,6 +56,7 @@ int main()
 	string name;
 	int id;
 	bool preferred;
+	bool exit = false;
 	
     vector<const char*> menuOptions;
     menuOptions.push_back("View Purchases for given day");
@@ -83,17 +83,13 @@ int main()
     modifyType.push_back("Modify");
     modifyType.push_back("Exit");
 
-	bool exit = false;
-
 	//output welcome statement
 	cout << setfill('*')  << setw(maxWidth) <<"*" << endl
 	     << setw(maxWidth/3) << "| " << setw(2) << setfill(' ') <<""
-		 << "BULK CLUB MANAGER SUITE "
-		 << setw(2) << setfill(' ') <<""
-		 << left <<setfill('*')
-		 << setw(maxWidth/3)<< " |" << endl
-		 <<setfill('*')  << setw(maxWidth) <<"*" << endl << setfill(' ')<< endl;
-
+		 << "BULK CLUB MANAGER SUITE " << setw(2) << setfill(' ') <<""
+		 << left <<setfill('*') << setw(maxWidth/3)<< " |" << endl
+		 << setfill('*')  << setw(maxWidth) <<"*" << endl
+		 << setfill(' ')<< endl;
 
 	cout << "Welcome to the Bulk Club Manager Suite. " << endl;
 	cout << "What would you like to do?" << endl;
@@ -128,7 +124,7 @@ int main()
 		switch(menuChoice)
 		{
 			case PURCHASE_BY_DAY:
-				cout << "Enter the date for the sales report:\n";
+				cout << "Enter the date for the sales report.\n";
 				cout << "Enter month: ";
 				month = validInt(1, 12);
 				cout << "Enter day: ";
@@ -354,7 +350,7 @@ void printPurchases(database& db, date& day)
             it!= db.getPurchases(day).second; ++it)
     {
        	cout << "| " << setw(30) <<  it->second.getItemName();
-       	cout << "|$" << setw(7) << (it->second.getTotalAmount())/ (it->second.getQuantity());
+       	cout << "|$" << setw(7) << (it->second.getUnitPrice())/ (it->second.getQuantity());
     	cout << "| " << setw(5) << it->second.getQuantity();
     	cout << "| " << setw(22) << (it->second.getMember())->getName();
     	cout << "| " << setw(7) << (it->second.getMember())->getID();
@@ -456,7 +452,7 @@ void MemberRead(database& d)
 		stringstream(dateStr.substr(3,4)) >> day;
 		stringstream(dateStr.substr(6,dateStr.length()-1)) >> year;
 
-		member temp(memberName, memberNum, memTypeBool, month, day, year);
+		basicMember temp(memberName, memberNum, memTypeBool, month, day, year);
 
 		d.addMember(temp);
 	}
@@ -480,16 +476,12 @@ void PurchaseWrite(database& db)
     	oFile << setw(4) << (it->second.getDate()).getYear() << setfill(' ') << endl;
     	oFile << (it->second.getMember())->getID() << endl;
     	oFile << it->second.getItemName() << endl;
-    	oFile << (it->second.getTotalAmount())/(it->second.getQuantity()) << " ";
+    	oFile << (it->second.getUnitPrice())/(it->second.getQuantity()) << " ";
     	oFile << it->second.getQuantity() << endl;
     }
 
     oFile.close();
 }
-
-
-
-
 
 void PurchaseRead(database& d)
 {
