@@ -52,12 +52,6 @@ public:
         //returns an iterator that represents the end of the purchases
         //sorted by member ID
 
-    purchase& getPurchase(multimap<date, purchase>::iterator& input);
-        //returns the purchase represented by the iterator input
-
-    purchase& getPurchase(multimap<int, purchase>::iterator& input);
-        //returns the purchase represented by the iterator input
-
     pair <multimap<date, purchase>::iterator,
     multimap<date, purchase>::iterator> getPurchases (date& input);
         //returns a pair of iterators that represent the range of purchases
@@ -67,6 +61,11 @@ public:
     multimap<int, purchase>::iterator> getPurchases (int input);
         //returns a pair of iterators that represent the range of purchases
         //that have the member ID input
+
+    pair <multimap<string, purchase>::iterator,
+    multimap<string, purchase>::iterator> getPurchases (string input);
+        //returns a pair of iterators that represent the range of purchases
+        //that have item name input
 
 private:
     struct datecomp {
@@ -98,6 +97,7 @@ private:
     map<string, member> memberByNameMap;
     multimap<date, purchase, datecomp> purchaseByDateMap;
     multimap<int, purchase> purchaseByIDMap;
+    multimap<string, purchase> purchaseByItemMap;
 };
 
 

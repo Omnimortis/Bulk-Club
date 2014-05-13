@@ -50,6 +50,8 @@ void database::addPurchase(purchase& input)
     purchaseByDateMap.insert(pair<date, purchase>(input.getDate(), input));
     purchaseByIDMap.insert(pair<int, purchase>(input.getMember()->getID(),
             input));
+    purchaseByItemMap.insert(pair<string, purchase>(input.getItemName(),
+    		input));
 }//end addPurchase function
 
 multimap<int, purchase>::iterator database::purchaseByIDBegin()
@@ -61,16 +63,6 @@ multimap<int, purchase>::iterator database::purchaseByIDEnd()
 {
     return purchaseByIDMap.end();
 }
-
-purchase& database::getPurchase(multimap<date, purchase>::iterator& input)
-{
-    return input->second;
-}//end getPurchase function
-
-purchase& database::getPurchase(multimap<int, purchase>::iterator& input)
-{
-    return input->second;
-}//end getPurchase function
 
 pair <multimap<date, purchase>::iterator,
     multimap<date, purchase>::iterator> database::getPurchases
@@ -84,4 +76,11 @@ pair <multimap<int, purchase>::iterator,
     (int input)
 {
     return purchaseByIDMap.equal_range(input);
+}
+
+pair <multimap<string, purchase>::iterator,
+    multimap<string, purchase>::iterator> database::getPurchases
+    (string input)
+{
+    return purchaseByItemMap.equal_range(input);
 }

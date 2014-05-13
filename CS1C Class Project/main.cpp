@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 #include <iterator>
-#include <limits>
 #include <map>
 #include <fstream>
 #include "member.h"
@@ -53,9 +52,9 @@ int main()
 	int day;
 	int year;
 	date newDate;
+	member newMember;
 	string name;
 	int id;
-	bool preferred;
 	bool exit = false;
 	
     vector<const char*> menuOptions;
@@ -80,8 +79,7 @@ int main()
     vector<const char*> modifyType;
     modifyType.push_back("Add");
     modifyType.push_back("Delete");
-    modifyType.push_back("Modify");
-    modifyType.push_back("Exit");
+    modifyType.push_back("Go Back");
 
 	//output welcome statement
 	cout << setfill('*')  << setw(maxWidth) <<"*" << endl
@@ -114,7 +112,7 @@ int main()
 
 		if (menuChoice != PURCHASE_BY_MEMBER && menuChoice != REBATES &&
 				menuChoice != UPGRADES && menuChoice != DOWNGRADES
-				&& menuChoice !=EXIT )
+				&& menuChoice != MODIFY_MEMBERS && menuChoice !=EXIT )
 		{
 			filterType = getReportType(reportType);
             cout << endl << reportType[(filterType - 1)]
@@ -200,25 +198,27 @@ int main()
 				}
 
 				cout << "Please enter your choice: ";
-				menuChoice = validInt(1, 4);
+				menuChoice = validInt(1, 3);
 				cout << "You have chosen " << modifyType[menuChoice -1]
 				     << endl;
+
 				switch (menuChoice)
 				{
 				case 1:
 				    cout << "Enter the name of the member you would like "
 				            "to add: ";
 				    getline(cin, name);
+				    newMember.setName(name);
 
 				    cout << "Enter the ID of the member you would like to"
 				            " add: ";
-				    id = validInt(0, 99999);
+				    newMember.setID(validInt(0, 99999));
 
 				    cout << "Is this a preferred member? (Yes or No): ";
-				    preferred = validBool();
+				    newMember.setType(validBool());
 
 				    cout << "Enter the date that the membership will "
-				            "expire:\n";
+				            "expire.\n";
 	                cout << "Enter month: ";
 	                month = validInt(1, 12);
 	                cout << "Enter day: ";
@@ -226,46 +226,38 @@ int main()
 	                cout << "Enter year: ";
 	                year = validInt(1950, 2014);
 	                
-	                //member newMember1(name, id, preferred, month, day,
-	                //        year);
+	                newMember.setExpDate(month, day, year);
 	                
-	                //db.addMember(newMember1);
+	                db.addMember(newMember);
 	                break;
-				case 2: //NOT TESTED
-				    cout << "Enter the member name or ID of the member you"
-				            " want to delete";
-				    bool intInput;
 
-				    while (getline(cin, name))
-				    {
-				        stringstream ss(name);
-				        if (ss >> id)
-				        {
-				            if(ss.eof())
-				            {
-				                break;
-				                intInput = true;
-				            }
-				            else
-				            {
-		                        cout << "Invalid Input, please try again: ";
-				            }
-				        }
-				        else
-				        {
-				            break;
-				            intInput = false;
-				        }
-				    }
+				case 2:
+					cout << "You may enter either the member name or ID "
+							"of the member you wish to delete.\n";
+					cout << "1. Enter member nane.\n";
+					cout << "2. Enter member ID.\n";
+					cout << "Please enter your choice: ";
+					menuChoice = validInt(1, 2);
 
-				    if (intInput)
-				    {
-				        db.removeMember(id);
-				    }
-				    else
-				    {
-				        db.removeMember(name);
-				    }
+					switch(menuChoice)
+					{
+					case 1:
+						cout << "Enter the name of the member you want to"
+								"delete: ";
+						getline(cin, name);
+
+						db.removeMember(name);
+						break;
+					case 2:
+					    cout << "Enter the member ID of the member you "
+					            "want to delete: ";
+					    id = validInt(0, 99999);
+
+					    db.removeMember(id);
+					    break;
+					}
+
+					break;
 				}
 				break;
 			case EXIT:
@@ -346,6 +338,7 @@ void printPurchases(database& db, date& day,int  filterType)
     cout << "| " << setw(10) << "Type";
     cout << "| " << endl;
     cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+
     for (multimap<date,purchase>::iterator it =
             db.getPurchases(day).first;
             it!= db.getPurchases(day).second; ++it)
