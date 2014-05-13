@@ -28,7 +28,8 @@ int validInt(int, int);
 bool validBool();
 int getReportType(const vector<const char*> &);
 //void printPurchases(database& db, date& day, int filterType);
-void printPurchases(database& db, date& day, int);
+void printAllPurchases(database& db, int filterType);
+void printPurchases(database& db, date& day, int filterType);
 void printPurchases(database& db, int id);
 void printPurchases(database& db, string name);
 void PurchaseWrite(database& db);
@@ -160,16 +161,7 @@ int main()
 				}
 				break;
 			case TOTAL_SALES:
-				cout << "Printing all sales sorted by member ID:" << endl;
-			    cout << "------------------------------------\n";
-
-			    for (multimap<int,purchase>::iterator it =
-			            db.purchaseByIDBegin();
-			            it!= db.purchaseByIDEnd(); ++it)
-			    {
-			        cout << it->second.toString();
-			        cout << "------------------------------------" << endl;
-			    }
+				printAllPurchases(db, filterType);
 				break;
 			case QUANTATIES:
 				cout << "Printing quantities of items sold ";
@@ -331,6 +323,60 @@ bool validBool()
     return choice;
 }
 
+void printAllPurchases(database& db, int filterType)
+{
+	int basicCount = 0, prefCount = 0;
+		float totalSales = 0;
+	cout << "Printing all sales sorted by member ID:" << endl;
+	cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+    cout << "| " << setw(30) << "Item";
+    cout << "| " << setw(7) << "Unit";
+    cout << "| " << setw(5) << "Qty";
+    cout << "| " << setw(22) << "Member Name";
+    cout << "| " << setw(7) << "ID";
+    cout << "| " << setw(10) << "Type";
+    cout << "| " << endl;
+    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+
+	for (multimap<int,purchase>::iterator it =
+			db.purchaseByIDBegin();
+			it!= db.purchaseByIDEnd(); ++it)
+	{
+		if(((filterType == 1) && !(it->second.getMember()->getType())) || ((filterType == 2) && (it->second.getMember()->getType())) || filterType == 3)
+	    	{
+	       	cout << "| " << setw(30) <<  it->second.getItemName();
+	       	cout << "|$" << setw(7) << (it->second.getUnitPrice())/ (it->second.getQuantity());
+	    	cout << "| " << setw(5) << it->second.getQuantity();
+	    	cout << "| " << setw(22) << (it->second.getMember())->getName();
+	    	cout << "| " << setw(7) << (it->second.getMember())->getID();
+	    	cout << "| " << setw(10);
+	    	totalSales+= (it->second.getUnitPrice());
+
+	    	if (it->second.getMember()->getType())
+	    	{
+	    		cout << "Prefered";
+	    		prefCount++;
+	    	}
+	    	else
+	    	{
+	    		cout << "Basic";
+	    		basicCount++;
+	    	}
+	    	cout << "| " << endl;
+
+	    	}
+
+
+	    }
+	 cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	    cout << endl << endl;
+	    cout << "Total Sales: $" << totalSales << endl;
+	    if(filterType != 2)
+	    	cout << "Basic Shoppers: " << basicCount << endl;
+	    if(filterType != 1)
+	    	cout << "Preferred Shoppers: " << prefCount << endl;
+}
+
 void printPurchases(database& db, date& day,int  filterType)
 {
 	int basicCount = 0, prefCount = 0;
@@ -350,7 +396,7 @@ void printPurchases(database& db, date& day,int  filterType)
             db.getPurchases(day).first;
             it!= db.getPurchases(day).second; ++it)
     {
-    	if(((filterType == 1) && !(it->second.getMember()->getType())) || ((filterType == 2) && (it->second.getMember()->getType())) || filterType == 3)
+    	if(filterType == 3)//((filterType == 1) && !(it->second.getMember()->getType())) || ((filterType == 2) && (it->second.getMember()->getType())) || filterType == 3)
     	{
        	cout << "| " << setw(30) <<  it->second.getItemName();
        	cout << "|$" << setw(7) << (it->second.getUnitPrice())/ (it->second.getQuantity());
@@ -373,28 +419,42 @@ void printPurchases(database& db, date& day,int  filterType)
     	cout << "| " << endl;
 
     	}
-
+    	   cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 
     }
     cout << endl << endl;
     cout << "Total Sales: $" << totalSales << endl;
-    cout << "Basic Shoppers: " << basicCount << endl;
-    cout << "Preferred Shoppers: " << prefCount << endl;
+    if(filterType != 2)
+	    	cout << "Basic Shoppers: " << basicCount << endl;
+	if(filterType != 1)
+		cout << "Preferred Shoppers: " << prefCount << endl;
 }
 
 void printPurchases(database& db, int id)
 {
     cout << "\nPurchases for member #" << id << " - "
             << db.findMember(id).getName() << ":" << endl;
-    cout << "------------------------------------\n";
+    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+         cout << "| " << setw(30) << "Item";
+         cout << "| " << setw(7) << "Unit";
+         cout << "| " << setw(5) << "Qty";
+         cout << "| " << setw(14) << "Date";
+         cout << "| " << endl;
+         cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 
-    for (multimap<int,purchase>::iterator it =
-            db.getPurchases(id).first;
-            it!= db.getPurchases(id).second; ++it)
-    {
-        cout << it->second.toString();
-        cout << "------------------------------------" << endl;
-    }
+
+       for (multimap<int,purchase>::iterator it =
+               db.getPurchases(id).first;
+               it!= db.getPurchases(id).second; ++it)
+       {
+           cout << "| " << setw(30) <<  it->second.getItemName();
+           cout << "| " << setw(7) <<  (it->second.getUnitPrice())/ (it->second.getQuantity());
+           cout << "| " << setw(5) << it->second.getQuantity();
+           cout << "| " << setw(14) << (it->second.getDate()).toString();
+
+       	cout << "| " << endl;
+       }
+       cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 }
 
 void printPurchases(database& db, string name)
@@ -403,15 +463,27 @@ void printPurchases(database& db, string name)
 
     cout << "\nPurchases for " << name << " - "
             << id << ":" << endl;
-    cout << "------------------------------------\n";
+    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+      cout << "| " << setw(30) << "Item";
+      cout << "| " << setw(7) << "Unit";
+      cout << "| " << setw(5) << "Qty";
+      cout << "| " << setw(14) << "Date";
+      cout << "| " << endl;
+      cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+
 
     for (multimap<int,purchase>::iterator it =
             db.getPurchases(id).first;
             it!= db.getPurchases(id).second; ++it)
     {
-        cout << it->second.toString();
-        cout << "------------------------------------" << endl;
+        cout << "| " << setw(30) <<  it->second.getItemName();
+        cout << "| " << setw(7) <<  (it->second.getUnitPrice())/ (it->second.getQuantity());
+        cout << "| " << setw(5) << it->second.getQuantity();
+        cout << "| " << setw(14) << (it->second.getDate()).toString();
+
+    	cout << "| " << endl;
     }
+    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 }
 
 int getReportType(const vector<const char*> &)
