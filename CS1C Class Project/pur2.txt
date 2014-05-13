@@ -1,3 +1,7 @@
+03/05/2014
+11122
+Spider
+5 3
 03/06/2014
 12121
 Toilet Paper
@@ -36,7 +40,7 @@ Assorted Muffins
 5.89 1
 03/07/2014
 12345
-diet Coke
+Diet Coke
 6.79 26
 03/13/2014
 12345
@@ -182,42 +186,6 @@ Ponds Lotion
 67899
 Bkfst Cereal Variety Pack
 7.29 4
-03/06/2014
-77777
-Wonder Bread
-1.29 6
-03/06/2014
-77777
-1.5 dozen eggs
-1.29 3
-03/07/2014
-77777
-Disney DVD Collection
-49.95 1
-03/07/2014
-77777
-The Princess Bride
-17.75 16
-03/13/2014
-77777
-Rack of Lamb
-14.79 4
-03/09/2014
-77777
-Crest Toothpaste
-7.59 2
-03/09/2014
-77777
-Grosse Pointe Blank DVD
-16.99 1
-03/09/2014
-77777
-Roasted Garlic Bread
-7.29 2
-03/09/2014
-77777
-Coke
-6.79 2
 03/05/2014
 88888
 EPSON Printer Cart.

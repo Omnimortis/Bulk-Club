@@ -5,8 +5,8 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-#ifndef BASICMEMBER_H_
-#define BASICMEMBER_H_
+#ifndef MEMBER_H_
+#define MEMBER_H_
 
 #include <string>
 #include "date.h"
@@ -76,4 +76,4 @@ private:
     float rebate;
 };
 
-#endif /* BASICMEMBER_H_ */
+#endif /* MEMBER_H_ */

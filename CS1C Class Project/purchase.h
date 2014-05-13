@@ -43,6 +43,10 @@ public:
 
 	float getUnitPrice();
 
+	//void setMemberName(string input);
+
+	//string getMemberName();
+
 	void setMember(member& member);
 
 	member* getMember();

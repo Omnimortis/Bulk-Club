@@ -5,6 +5,7 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -12,6 +13,7 @@
 #include <vector>
 #include <iterator>
 #include <map>
+#include <set>
 #include <fstream>
 #include "member.h"
 #include "RuntimeException.h"
@@ -26,16 +28,17 @@ void PurchaseRead(database& d);
 int validInt(int, int);
 bool validBool();
 int getReportType(const vector<const char*> &);
-//void printPurchases(database& db, date& day, int filterType);
 void printAllPurchases(database& db, int filterType);
 void printPurchases(database& db, date& day, int filterType);
 void printPurchases(database& db, int id);
 void printPurchases(database& db, string name);
 void PurchaseWrite(database& db);
+void MemberWrite(database& db);
+void pause();
 
 const int maxWidth = 80;
-enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_ITEM, PURCHASE_BY_MEMBER,
-		TOTAL_SALES, QUANTATIES, REBATES, DUES_PAID,
+enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_MEMBER, TOTAL_SALES,
+		PURCHASE_BY_ITEM, QUANTATIES, REBATES, DUES_PAID,
 		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,
 		EXIT};
 
@@ -54,22 +57,24 @@ int main()
 	int year;
 	date newDate;
 	member newMember;
+	purchase newPurchase;
 	string name;
 	int id;
+	float price;
 	bool exit = false;
 	
     vector<const char*> menuOptions;
-    menuOptions.push_back("View Purchases for given day");
-    menuOptions.push_back("View Purchases for given item");
+    menuOptions.push_back("View Sales Report for a given day");
     menuOptions.push_back("View Purchases for given member");
-    menuOptions.push_back("View Total Sales");
-    menuOptions.push_back("View Quantity of Items Sold");
+    menuOptions.push_back("View all Purchases for all members");
+    menuOptions.push_back("View Sales Report for a given item");
+    menuOptions.push_back("View Quantity of all Items sold");
     menuOptions.push_back("View Member Rebate Report");
-    menuOptions.push_back("View Membership Dues Paid");
-    menuOptions.push_back("View Membership Expirations");
+    menuOptions.push_back("View Membership Dues Report");
+    menuOptions.push_back("View Membership Expirations for a given month");
     menuOptions.push_back("Check for Membership Upgrades");
     menuOptions.push_back("Check for Membership Downgrades");
-    menuOptions.push_back("Add/Delete/Edit Members");
+    menuOptions.push_back("Add/Delete Members");
     menuOptions.push_back("Exit");
 
 	vector<const char*> reportType;
@@ -111,14 +116,19 @@ int main()
 
 		cout << endl << menuOptions[menuChoice - 1] << endl << endl;
 
-		if (menuChoice != PURCHASE_BY_MEMBER && menuChoice != REBATES &&
-				menuChoice != UPGRADES && menuChoice != DOWNGRADES
-				&& menuChoice != MODIFY_MEMBERS && menuChoice !=EXIT )
+		if (menuChoice != PURCHASE_BY_MEMBER &&
+				menuChoice != PURCHASE_BY_ITEM && menuChoice != QUANTATIES
+				&& menuChoice != REBATES && menuChoice != DUES_PAID &&
+				menuChoice != MEMBERSHIP_EXPIRTATIONS &&
+				menuChoice != UPGRADES && menuChoice != DOWNGRADES &&
+				menuChoice != MODIFY_MEMBERS && menuChoice !=EXIT )
 		{
 			filterType = getReportType(reportType);
             cout << endl << reportType[(filterType - 1)]
                  << endl << endl;
 		}
+
+		cout << setprecision(2) << fixed;
 
 		switch(menuChoice)
 		{
@@ -134,11 +144,9 @@ int main()
 				newDate.setMonth(month);
 				newDate.setYear(year);
 				printPurchases(db, newDate, filterType);
-			//	printPurchases(db, newDate, filterType);
+				pause();
 				break;
-			case PURCHASE_BY_ITEM:
-				cout << "Enter Item Name: ";
-				break;
+
 			case PURCHASE_BY_MEMBER:
 				cout << "Search by Member Name or Number?\n";
 				cout << "1. Member Name" << endl;
@@ -157,32 +165,261 @@ int main()
 				    cout << "Enter the member number: ";
 				    printPurchases(db, validInt(0, 99999));
 				}
+				pause();
 				break;
+
 			case TOTAL_SALES:
 				printAllPurchases(db, filterType);
+				pause();
 				break;
+			case PURCHASE_BY_ITEM:
+				cout << "Enter Item Name: ";
+				getline(cin, name);
+
+				if (db.checkItem(name) != 0)
+				{
+					cout << "\nQuantity of " << name << "s sold to date: "
+							<< db.getItemQuantity(name) << endl;
+					cout <<"Total revenue from all sales of " << name
+							<< ": $" << db.getItemSales(name) << endl;
+				}
+				else
+				{
+					cout << "\nNo " << name << "s have ever been sold."
+							<< endl;
+				}
+
+				pause();
+				break;
+
 			case QUANTATIES:
-				cout << "Printing quantities of items sold ";
+				cout << "Printing quantities of all items sold sorted by "
+						"item name:" << endl;
+
+				cout << setw(40) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+			    cout << "| " << setw(30) << "Item Name";
+			    cout << "| " << setw(5) << "Qty";
+			    cout << "| " << endl;
+			    cout << setw(40) << setfill('-') << "-" << setfill(' ')
+			    		<< endl;
+
+				for (map<string ,int>::iterator it =
+						db.quantityItemMapBegin();
+						it!= db.quantityItemMapEnd(); it++)
+				{
+					cout << "| " << setw(30) <<  it->first;
+					cout << "| " << setw(5) << it->second;
+					cout << "|" << endl;
+				}
+				 cout << setw(40) << setfill('-') << "-" << setfill(' ')
+						 << endl;
+
+				 pause();
 				break;
+
 			case REBATES:
 				cout << "Printing rebate information for Preferred"
-				        "Members ";
+				        " Members sorted by ID:" << endl;
+
+				cout << setw(45) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+			    cout << "| " << setw(22) << "Member Name";
+				cout << "| " << setw(7) << "ID";
+			    cout << "| " << setw(9) << "Rebate";
+			    cout << "|" << endl;
+				cout << setw(45) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				for (map<int,member>::iterator it = db.memberIDMapBegin();
+						it != db.memberIDMapEnd(); it++)
+				{
+					if (it->second.getType())
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(7) << it->second.getID();
+					    cout << "| $" << right << setw(8)
+					    		<< it->second.getRebate() << left;
+					    cout << "|" << endl;
+					}
+				}
+
+				cout << setw(45) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+				pause();
 				break;
+
 			case DUES_PAID:
-				cout << "Printing membership dues  ";
+				cout << "Printing membership dues sorted by membership "
+						"type and then by name:" << endl;
+
+				cout << setw(46) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+			    cout << "| " << setw(22) << "Member Name";
+			    cout << "| " << setw(10) << "Type";
+			    cout << "| " << setw(7) << "Dues";
+			    cout << "|" << endl;
+				cout << setw(46) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				for (map<string,member>::iterator it =
+						db.memberNameMapBegin(); it !=
+								db.memberNameMapEnd(); it++)
+				{
+					if (!it->second.getType())
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(10) << "Basic";
+						cout << "| $" << setw(6) << right << "60.00"
+								<< left;
+						cout << "|" << endl;
+					}
+				}
+
+				for (map<string,member>::iterator it =
+						db.memberNameMapBegin(); it !=
+								db.memberNameMapEnd(); it++)
+				{
+					if (it->second.getType())
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(10) << "Preferred";
+						cout << "| $" << setw(6) << right << "75.00"
+								<< left;
+						cout << "|" << endl;
+					}
+				}
+
+				cout << setw(46) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				pause();
 				break;
+
 			case MEMBERSHIP_EXPIRTATIONS:
-				cout << "Enter month to check for membership expirations";
+				cout << "Enter month to check membership expirations: ";
+				month = validInt(1, 12);
+
+				cout << "\nMemberships that will expire in chosen month\n";
+				cout << setw(73) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+			    cout << "| " << setw(22) << "Member Name";
+			    cout << "| " << setw(10) << "Type";
+			    cout << "| " << setw(25) << "Exp. Date";
+			    cout << "| " << setw(7) << "Dues";
+			    cout << "|" << endl;
+				cout << setw(73) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				for (map<string,member>::iterator it =
+						db.memberNameMapBegin(); it !=
+								db.memberNameMapEnd(); it++)
+				{
+					if (!it->second.getType() &&
+							it->second.getExpDate().getMonth() == month)
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(10) << "Basic";
+						cout << "| " << setw(25) <<
+								it->second.getExpDate().toString();
+						cout << "| $" << setw(6) << right << "60.00"
+								<< left;
+						cout << "|" << endl;
+					}
+				}
+
+				for (map<string,member>::iterator it =
+						db.memberNameMapBegin(); it !=
+								db.memberNameMapEnd(); it++)
+				{
+					if (it->second.getType() &&
+							it->second.getExpDate().getMonth() == month)
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(10) << "Preferred";
+						cout << "| " << setw(25) <<
+								it->second.getExpDate().toString();
+						cout << "| $" << setw(6) << right << "75.00"
+								<< left;
+						cout << "|" << endl;
+					}
+				}
+
+				cout << setw(73) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				pause();
 				break;
+
 			case UPGRADES:
 				cout << "Checking for members that would benefit from an"
-				        "upgrade";
+				        " upgrade" << endl;
+
+				cout << setw(49) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+			    cout << "| " << setw(22) << "Member Name";
+				cout << "| " << setw(7) << "ID";
+			    cout << "| " << setw(13) << "Exp. Rebate";
+			    cout << "|" << endl;
+				cout << setw(49) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				for (map<string,member>::iterator it =
+						db.memberNameMapBegin(); it !=
+								db.memberNameMapEnd(); it++)
+				{
+					if (!it->second.getType() &&
+							it->second.getRebate() > 15)
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(7) << it->second.getID();
+					    cout << "| $" << right << setw(12)
+					    		<< it->second.getRebate() << left;
+						cout << "|" << endl;
+					}
+				}
+
+				cout << setw(49) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				pause();
 				break;
+
 			case DOWNGRADES:
 				cout << "Checking for members that would benefit from an"
-				        "upgrade";
+				        " downgrade" << endl;
+
+				cout << setw(45) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+			    cout << "| " << setw(22) << "Member Name";
+				cout << "| " << setw(7) << "ID";
+			    cout << "| " << setw(9) << "Rebate";
+			    cout << "|" << endl;
+				cout << setw(45) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				for (map<string,member>::iterator it =
+						db.memberNameMapBegin(); it !=
+								db.memberNameMapEnd(); it++)
+				{
+					if (it->second.getType() &&
+							it->second.getRebate() < 15)
+					{
+					    cout << "| " << setw(22) << it->second.getName();
+						cout << "| " << setw(7) << it->second.getID();
+					    cout << "| $" << right << setw(8)
+					    		<< it->second.getRebate() << left;
+						cout << "|" << endl;
+					}
+				}
+
+				cout << setw(45) << setfill('-') << "-" << setfill(' ')
+						<< endl;
+
+				pause();
 				break;
-			case MODIFY_MEMBERS:  // Handle logic
+
+			case MODIFY_MEMBERS:
 				cout << "What would you like to do?" << endl;
 				for (unsigned int i = 0; i < modifyType.size(); i++)
 				{
@@ -204,7 +441,8 @@ int main()
 
 				    cout << "Enter the ID of the member you would like to"
 				            " add: ";
-				    newMember.setID(validInt(0, 99999));
+				    id = validInt(0, 99999);
+				    newMember.setID(id);
 
 				    cout << "Is this a preferred member? (Yes or No): ";
 				    newMember.setType(validBool());
@@ -221,12 +459,45 @@ int main()
 	                newMember.setExpDate(month, day, year);
 	                
 	                db.addMember(newMember);
+
+	                cout << "Member Added." << endl;
+	                cout << "Add a new purchase to " << name << endl;
+
+	                newPurchase.setMember(db.findMember(id));
+
+	                cout << "\nEnter Item Name: ";
+				    getline(cin, name);
+
+				    newPurchase.setItemName(name);
+
+				    cout << "Enter the purchase date." << endl;
+	                cout << "Enter month: ";
+	                month = validInt(1, 12);
+	                cout << "Enter day: ";
+	                day = validInt(1, 31);
+	                cout << "Enter year: ";
+	                year = validInt(1950, 2014);
+
+	                newPurchase.setDate(month, day, year);
+
+	                cout << "Enter the quantity: ";
+	                newPurchase.setQuantity(validInt(1,1000));
+
+	                cout << "Enter the unit price: $";
+	                cin >> price;
+	                cin.ignore(1000, '\n');
+	                newPurchase.setUnitPrice(price *
+	                		newPurchase.getQuantity());
+
+	                db.addPurchase(newPurchase);
+
 	                break;
 
 				case 2:
+					bool invalid = true;
 					cout << "You may enter either the member name or ID "
 							"of the member you wish to delete.\n";
-					cout << "1. Enter member nane.\n";
+					cout << "1. Enter member name.\n";
 					cout << "2. Enter member ID.\n";
 					cout << "Please enter your choice: ";
 					menuChoice = validInt(1, 2);
@@ -234,31 +505,57 @@ int main()
 					switch(menuChoice)
 					{
 					case 1:
-						cout << "Enter the name of the member you want to"
-								"delete: ";
-						getline(cin, name);
+						while(invalid)
+						{
+							cout << "Enter the name of the member you want"
+									" to delete: ";
+							getline(cin, name);
 
-						db.removeMember(name);
+							try
+							{
+								db.removeMember(name);
+								invalid = false;
+							}
+							catch(RuntimeException& err)
+							{
+								cout << err.getMessage();
+							}
+						}
 						break;
 					case 2:
-					    cout << "Enter the member ID of the member you "
-					            "want to delete: ";
-					    id = validInt(0, 99999);
+						while(invalid)
+						{
+						    cout << "Enter the member ID of the member you"
+						            " want to delete: ";
+						    id = validInt(0, 99999);
 
-					    db.removeMember(id);
+						    try
+						    {
+							    db.removeMember(id);
+							    invalid = false;
+						    }
+						    catch(RuntimeException& err)
+						    {
+						    	cout << err.getMessage();
+						    }
+						}
 					    break;
 					}
 
 					break;
 				}
 				break;
+
 			case EXIT:
 				cout << "Goodbye";
 				exit = true;
+				PurchaseWrite(db);
+				MemberWrite(db);
 				break;
 		}
 		cout << endl;
 	} while (!exit);
+	pause();
 #endif
 	return 0;
 }
@@ -317,8 +614,10 @@ bool validBool()
 
 void printAllPurchases(database& db, int filterType)
 {
+	set<int> idSet;
 	int basicCount = 0, prefCount = 0;
-		float totalSales = 0;
+	float totalSales = 0;
+
 	cout << "Printing all sales sorted by member ID:" << endl;
 	cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
     cout << "| " << setw(30) << "Item";
@@ -334,25 +633,39 @@ void printAllPurchases(database& db, int filterType)
 			db.purchaseByIDBegin();
 			it!= db.purchaseByIDEnd(); ++it)
 	{
-		if(((filterType == 1) && !(it->second.getMember()->getType())) || ((filterType == 2) && (it->second.getMember()->getType())) || filterType == 3)
+		if(((filterType == 1) && !(it->second.getMember()->getType())) ||
+				((filterType == 2) && (it->second.getMember()->getType()))
+				|| filterType == 3)
 	    	{
 	       	cout << "| " << setw(30) <<  it->second.getItemName();
-	       	cout << "|$" << setw(7) << (it->second.getUnitPrice())/ (it->second.getQuantity());
+	       	cout << "|$" << right << setw(7) << (it->second.getUnitPrice())
+	       			/ (it->second.getQuantity()) << left;
 	    	cout << "| " << setw(5) << it->second.getQuantity();
-	    	cout << "| " << setw(22) << (it->second.getMember())->getName();
+	    	cout << "| " << setw(22) <<
+	    			(it->second.getMember())->getName();
 	    	cout << "| " << setw(7) << (it->second.getMember())->getID();
 	    	cout << "| " << setw(10);
 	    	totalSales+= (it->second.getUnitPrice());
 
 	    	if (it->second.getMember()->getType())
 	    	{
-	    		cout << "Prefered";
-	    		prefCount++;
+	    		cout << "Preferred";
+
+	    		if (idSet.count(it->second.getMember()->getID()) == 0)
+	    		{
+	    			idSet.insert(it->second.getMember()->getID());
+		    		prefCount++;
+	    		}
 	    	}
 	    	else
 	    	{
 	    		cout << "Basic";
-	    		basicCount++;
+
+	    		if (idSet.count(it->second.getMember()->getID()) == 0)
+	    		{
+	    			idSet.insert(it->second.getMember()->getID());
+		    		basicCount++;
+	    		}
 	    	}
 	    	cout << "| " << endl;
 
@@ -371,112 +684,159 @@ void printAllPurchases(database& db, int filterType)
 
 void printPurchases(database& db, date& day,int  filterType)
 {
+	set<int> idSet;
 	int basicCount = 0, prefCount = 0;
 	float totalSales = 0;
-    cout << "\nPurchases for " << day.toString() << ":"
-            << endl;
-    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
-    cout << "| " << setw(30) << "Item";
-    cout << "| " << setw(7) << "Unit";
-    cout << "| " << setw(5) << "Qty";
-    cout << "| " << setw(22) << "Member Name";
-    cout << "| " << setw(7) << "ID";
-    cout << "| " << setw(10) << "Type";
-    cout << "| " << endl;
-    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 
-    for (multimap<date,purchase>::iterator it =
-            db.getPurchases(day).first;
-            it!= db.getPurchases(day).second; ++it)
-    {
-    	if(filterType == 3)//((filterType == 1) && !(it->second.getMember()->getType())) || ((filterType == 2) && (it->second.getMember()->getType())) || filterType == 3)
-    	{
-       	cout << "| " << setw(30) <<  it->second.getItemName();
-       	cout << "|$" << setw(7) << (it->second.getUnitPrice())/ (it->second.getQuantity());
-    	cout << "| " << setw(5) << it->second.getQuantity();
-    	cout << "| " << setw(22) << (it->second.getMember())->getName();
-    	cout << "| " << setw(7) << (it->second.getMember())->getID();
-    	cout << "| " << setw(10);
-    	totalSales+= (it->second.getUnitPrice());
+	if (db.getPurchases(day).first != db.getPurchases(day).second)
+	{
+		cout << "\nPurchases for " << day.toString() << ":"
+				<< endl;
+		cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+		cout << "| " << setw(30) << "Item";
+		cout << "| " << setw(7) << "Unit";
+		cout << "| " << setw(5) << "Qty";
+		cout << "| " << setw(22) << "Member Name";
+		cout << "| " << setw(7) << "ID";
+		cout << "| " << setw(10) << "Type";
+		cout << "| " << endl;
+		cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 
-    	if (it->second.getMember()->getType())
-    	{
-    		cout << "Prefered";
-    		prefCount++;
-    	}
-    	else
-    	{
-    		cout << "Basic";
-    		basicCount++;
-    	}
-    	cout << "| " << endl;
+		for (multimap<date,purchase>::iterator it =
+				db.getPurchases(day).first;
+				it!= db.getPurchases(day).second; ++it)
+		{
+			if(((filterType == 1) && !(it->second.getMember()->getType()))
+					|| ((filterType == 2) &&
+							(it->second.getMember()->getType()))
+							|| filterType == 3)
+			{
+				cout << "| " << setw(30) <<  it->second.getItemName();
+				cout << "|$" << right << setw(7) <<
+						(it->second.getUnitPrice()) /
+						(it->second.getQuantity()) << left;
+				cout << "| " << setw(5) << it->second.getQuantity();
+				cout << "| " << setw(22) <<
+						(it->second.getMember())->getName();
+				cout << "| " << setw(7) <<
+						(it->second.getMember())->getID();
+				cout << "| " << setw(10);
+				totalSales+= (it->second.getUnitPrice());
 
-    	}
-    	   cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+				if (it->second.getMember()->getType())
+				{
+					cout << "Preferred";
 
-    }
-    cout << endl << endl;
-    cout << "Total Sales: $" << totalSales << endl;
-    if(filterType != 2)
-	    	cout << "Basic Shoppers: " << basicCount << endl;
-	if(filterType != 1)
-		cout << "Preferred Shoppers: " << prefCount << endl;
+					if (idSet.count(it->second.getMember()->getID()) == 0)
+					{
+						idSet.insert(it->second.getMember()->getID());
+						prefCount++;
+					}
+				}
+				else
+				{
+					cout << "Basic";
+
+					if (idSet.count(it->second.getMember()->getID()) == 0)
+					{
+						idSet.insert(it->second.getMember()->getID());
+						basicCount++;
+					}
+				}
+				cout << "| " << endl;
+			}
+		}
+
+		cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+		cout << endl;
+		cout << "Total Sales: $" << totalSales << endl;
+		if(filterType != 2)
+				cout << "Basic Shoppers: " << basicCount << endl;
+		if(filterType != 1)
+			cout << "Preferred Shoppers: " << prefCount << endl;
+	}
+	else
+	{
+		cout << "\nThere are no purchases recorded for " << day.toString()
+				<< endl;
+	}
 }
 
 void printPurchases(database& db, int id)
 {
-    cout << "\nPurchases for member #" << id << " - "
-            << db.findMember(id).getName() << ":" << endl;
-    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
-         cout << "| " << setw(30) << "Item";
-         cout << "| " << setw(7) << "Unit";
-         cout << "| " << setw(5) << "Qty";
-         cout << "| " << setw(14) << "Date";
-         cout << "| " << endl;
-         cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	if (db.checkMember(id) != 0)
+	{
+	    cout << "\nPurchases for member #" << id << " - "
+	            << db.findMember(id).getName() << ":" << endl;
+	    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	         cout << "| " << setw(30) << "Item";
+	         cout << "| " << setw(7) << "Unit";
+	         cout << "| " << setw(5) << "Qty";
+	         cout << "| " << setw(14) << "Date";
+	         cout << "| " << endl;
+	         cout << setw(94) << setfill('-') << "-" << setfill(' ')
+	        		 << endl;
 
 
-       for (multimap<int,purchase>::iterator it =
-               db.getPurchases(id).first;
-               it!= db.getPurchases(id).second; ++it)
-       {
-           cout << "| " << setw(30) <<  it->second.getItemName();
-           cout << "| " << setw(7) <<  (it->second.getUnitPrice())/ (it->second.getQuantity());
-           cout << "| " << setw(5) << it->second.getQuantity();
-           cout << "| " << setw(14) << (it->second.getDate()).toString();
+	       for (multimap<int,purchase>::iterator it =
+	               db.getPurchases(id).first;
+	               it!= db.getPurchases(id).second; ++it)
+	       {
+	           cout << "| " << setw(30) <<  it->second.getItemName();
+	           cout << "| " << setw(7) <<  (it->second.getUnitPrice()) /
+	        		   (it->second.getQuantity());
+	           cout << "| " << setw(5) << it->second.getQuantity();
+	           cout << "| " << setw(14) <<
+	        		   (it->second.getDate()).toString();
 
-       	cout << "| " << endl;
-       }
-       cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	       	cout << "| " << endl;
+	       }
+	       cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	}
+	else
+	{
+		cout << "\nThere are no purchases recorded for member #" << id
+				<< endl;
+	}
 }
 
 void printPurchases(database& db, string name)
 {
-    int id = db.findMember(name).getID();
+	if (db.checkMember(name) != 0)
+	{
+	    int id = db.findMember(name).getID();
 
-    cout << "\nPurchases for " << name << " - "
-            << id << ":" << endl;
-    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
-      cout << "| " << setw(30) << "Item";
-      cout << "| " << setw(7) << "Unit";
-      cout << "| " << setw(5) << "Qty";
-      cout << "| " << setw(14) << "Date";
-      cout << "| " << endl;
-      cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	    cout << "\nPurchases for " << name << " - "
+	            << id << ":" << endl;
+	    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	      cout << "| " << setw(30) << "Item";
+	      cout << "| " << setw(7) << "Unit";
+	      cout << "| " << setw(5) << "Qty";
+	      cout << "| " << setw(14) << "Date";
+	      cout << "| " << endl;
+	      cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
 
 
-    for (multimap<int,purchase>::iterator it =
-            db.getPurchases(id).first;
-            it!= db.getPurchases(id).second; ++it)
-    {
-        cout << "| " << setw(30) <<  it->second.getItemName();
-        cout << "| " << setw(7) <<  (it->second.getUnitPrice())/ (it->second.getQuantity());
-        cout << "| " << setw(5) << it->second.getQuantity();
-        cout << "| " << setw(14) << (it->second.getDate()).toString();
+	    for (multimap<int,purchase>::iterator it =
+	            db.getPurchases(id).first;
+	            it!= db.getPurchases(id).second; ++it)
+	    {
+	        cout << "| " << setw(30) <<  it->second.getItemName();
+	        cout << "| " << setw(7) <<  (it->second.getUnitPrice()) /
+	        		(it->second.getQuantity());
+	        cout << "| " << setw(5) << it->second.getQuantity();
+	        cout << "| " << setw(14) << (it->second.getDate()).toString();
 
-    	cout << "| " << endl;
-    }
-    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	    	cout << "| " << endl;
+	    }
+	    cout << setw(94) << setfill('-') << "-" << setfill(' ') << endl;
+	}
+	else
+	{
+		cout << "\nThere are no purchases recorded for " << name
+				<< endl;
+	}
+
 }
 
 int getReportType(const vector<const char*> &)
@@ -497,7 +857,7 @@ void MemberRead(database& d)
 	int month, day, year, memberNum;
 
 	// PROCESSING - Associates file name with input stream variable
-	iFile.open("warehouse shopper.txt");
+	iFile.open("shop2.txt");
 
 	while (iFile)
 	{
@@ -530,6 +890,38 @@ void MemberRead(database& d)
 	iFile.close();
 }
 
+void MemberWrite(database& db)
+{
+	ofstream oFile;
+
+	oFile.open("shop2.txt");
+
+    for (map<int,member>::iterator it =
+            db.memberIDMapBegin();
+            it!= db.memberIDMapEnd(); ++it)
+    {
+    	oFile << it->second.getName() << endl;
+    	oFile << it->second.getID() << endl;
+    	oFile << (it->second.getType() ? "Preferred" : "Basic") << endl;
+    	oFile << setw(2) << setfill('0')
+    			<< (it->second.getExpDate()).getMonth() <<"/";
+    	oFile << setw(2) << (it->second.getExpDate()).getDay() <<"/";
+    	oFile << setw(4) << (it->second.getExpDate()).getYear()
+    			<< setfill(' ');
+    	if (++it != db.memberIDMapEnd())
+    	{
+    		oFile << endl;
+    		it--;
+    	}
+    	else
+    	{
+    		it--;
+    	}
+    }
+
+    oFile.close();
+}
+
 void PurchaseWrite(database& db)
 {
 	ofstream oFile;
@@ -541,13 +933,26 @@ void PurchaseWrite(database& db)
             db.purchaseByIDBegin();
             it!= db.purchaseByIDEnd(); ++it)
     {
-    	oFile << setw(2) << setfill('0') << (it->second.getDate()).getMonth() <<"/";
+    	oFile << setw(2) << setfill('0')
+    			<< (it->second.getDate()).getMonth() <<"/";
     	oFile << setw(2) << (it->second.getDate()).getDay() <<"/";
-    	oFile << setw(4) << (it->second.getDate()).getYear() << setfill(' ') << endl;
+    	oFile << setw(4) << (it->second.getDate()).getYear()
+    			<< setfill(' ') << endl;
     	oFile << (it->second.getMember())->getID() << endl;
     	oFile << it->second.getItemName() << endl;
-    	oFile << (it->second.getUnitPrice())/(it->second.getQuantity()) << " ";
-    	oFile << it->second.getQuantity() << endl;
+    	oFile << (it->second.getUnitPrice())/(it->second.getQuantity())
+    			<< " ";
+    	oFile << it->second.getQuantity();
+
+    	if (++it != db.purchaseByIDEnd())
+    	{
+    		oFile << endl;
+    		it--;
+    	}
+    	else
+    	{
+    		it--;
+    	}
     }
 
     oFile.close();
@@ -561,7 +966,7 @@ void PurchaseRead(database& d)
 	int month, day, year, memNum, quantity;
 
 	// PROCESSING - Associates file name with input stream variable
-	iFile.open("purchaseFile.txt");
+	iFile.open("pur2.txt");
 
 	while(iFile)
 	{
@@ -580,9 +985,16 @@ void PurchaseRead(database& d)
 		iFile >> quantity;
 		iFile.ignore(1000, '\n');
 
-		purchase temp(itemName, quantity, (quantity*unitPrice), d.findMember(memNum), month, day, year);
+		purchase temp(itemName, quantity, (quantity*unitPrice),
+				d.findMember(memNum), month, day, year);
 		d.addPurchase(temp);
 	}
 
 	iFile.close();
+}
+
+void pause()
+{
+	system("pause");
+	cin.ignore(1000, '\n');
 }
