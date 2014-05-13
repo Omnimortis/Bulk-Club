@@ -14,7 +14,7 @@ purchase::purchase():
 }
 
 purchase::purchase(string nameInit, int quantityInit,float priceInit,
-		basicMember& memberInit, int monthInit, int dayInit,
+		member& memberInit, int monthInit, int dayInit,
 		int yearInit):
 		        itemName(nameInit), quantity(quantityInit),
 		        unitPrice(priceInit), bulkMember(&memberInit),
@@ -62,12 +62,12 @@ float purchase::getUnitPrice()
 	return unitPrice;
 }
 
-void purchase::setMember(basicMember& member)
+void purchase::setMember(member& member)
 {
 	bulkMember = &member;
 }
 
-basicMember* purchase::getMember()
+member* purchase::getMember()
 {
 	return bulkMember;
 

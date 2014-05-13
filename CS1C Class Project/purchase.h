@@ -13,10 +13,10 @@
 #include <string>
 #include <iomanip>
 #include "date.h"
-#include "basicMember.h"
+#include "member.h"
 using namespace std;
 
-class basicMember;
+class member;
 
 class purchase
 {
@@ -24,7 +24,7 @@ public:
 	purchase();
 
 	purchase(string nameInit, int quantityInit, float priceInit,
-			basicMember& memberInit, int monthInit, int dayInit,
+			member& memberInit, int monthInit, int dayInit,
 			int yearInit);
 
 	void setDate(int month, int day, int year);
@@ -43,9 +43,9 @@ public:
 
 	float getUnitPrice();
 
-	void setMember(basicMember& member);
+	void setMember(member& member);
 
-	basicMember* getMember();
+	member* getMember();
 
 	string toString();
 
@@ -53,7 +53,7 @@ private:
 	string itemName;
 	int quantity;
 	float unitPrice;
-	basicMember *bulkMember;
+	member *bulkMember;
 	date purchaseDate;
 };
 

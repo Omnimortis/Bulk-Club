@@ -5,17 +5,18 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-#include "basicMember.h"
+#include "member.h"
 
-basicMember::basicMember()
+member::member()
 {
     name = "";
     id = 0;
     type = false;
     amtSpent = 0;
+    rebate = 0;
 }
 
-basicMember::basicMember(string initName, int initID, bool initType,
+member::member(string initName, int initID, bool initType,
 		int monthInit, int dayInit, int yearInit):
 				expDate(monthInit, dayInit, yearInit)
 {
@@ -23,59 +24,70 @@ basicMember::basicMember(string initName, int initID, bool initType,
     id = initID;
     type = initType;
     amtSpent = 0;
+    rebate = 0;
 }
 
-void basicMember::setName(string input)
+void member::setName(string input)
 {
     name = input;
 }
 
-string basicMember::getName() const
+string member::getName() const
 {
     return name;
 }
 
-void basicMember::setID(int input)
+void member::setID(int input)
 {
     id = input;
 }
 
-int basicMember::getID() const
+int member::getID() const
 {
     return id;
 }
 
-void basicMember::setType(bool input)
+void member::setType(bool input)
 {
     type = input;
 }
 
-bool basicMember::getType() const
+bool member::getType() const
 {
     return type;
 }
 
-void basicMember::setExpDate(int monthInit, int dayInit, int yearInit)
+void member::setExpDate(int monthInit, int dayInit, int yearInit)
 {
     expDate.setDate(monthInit, dayInit, yearInit);
 }
 
-date basicMember::getExpDate() const
+date member::getExpDate() const
 {
     return expDate;
 }
 
-void basicMember::setAmtSpent(float input)
+void member::setAmtSpent(float input)
 {
     amtSpent = input;
 }
 
-float basicMember::getAmtSpent() const
+float member::getAmtSpent() const
 {
     return amtSpent;
 }
 
-string basicMember::toString() const
+void member::setRebate(float input)
+{
+    rebate = input;
+}
+
+float member::getRebate() const
+{
+    return rebate;
+}
+
+string member::toString() const
 {
     string rtn = "";
     string temp;
@@ -99,6 +111,11 @@ string basicMember::toString() const
     convert << amtSpent;
     temp = convert.str();
     rtn += ("Total Amount Spent: $" + temp + "\n");
+    convert.str("");
+
+    convert << rebate;
+    temp = convert.str();
+    rtn += ("Current Rebate amount: $" + temp + "\n");
     convert.str("");
 
     return rtn;

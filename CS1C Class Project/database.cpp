@@ -13,10 +13,10 @@ database::database()
 {
 }//end constructor
 
-void database::addMember(basicMember& input)
+void database::addMember(member& input)
 {
-    memberByIDMap.insert(pair<int, basicMember>(input.getID(), input));
-    memberByNameMap.insert(pair<string, basicMember>(input.getName(), input));
+    memberByIDMap.insert(pair<int, member>(input.getID(), input));
+    memberByNameMap.insert(pair<string, member>(input.getName(), input));
 }//end addMember function
 
 void database::removeMember(int memberID)
@@ -35,12 +35,12 @@ void database::removeMember(string memberName)
     memberByNameMap.erase(memberName);
 }//end removeMember function
 
-basicMember& database::findMember(int memberID)
+member& database::findMember(int memberID)
 {
     return memberByIDMap[memberID];
 }//end findMember function
 
-basicMember& database::findMember(string memberName)
+member& database::findMember(string memberName)
 {
     return memberByNameMap[memberName];
 }//end findMember function

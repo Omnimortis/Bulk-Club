@@ -5,7 +5,6 @@
  * SECTION      : TTh: 8:30AM - 9:50AM
  * Due Date     : 5/15/2014
  *************************************************************************/
-
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -15,7 +14,7 @@
 #include <limits>
 #include <map>
 #include <fstream>
-#include "basicMember.h"
+#include "member.h"
 #include "RuntimeException.h"
 #include "database.h"
 #include "purchase.h"
@@ -452,7 +451,7 @@ void MemberRead(database& d)
 		stringstream(dateStr.substr(3,4)) >> day;
 		stringstream(dateStr.substr(6,dateStr.length()-1)) >> year;
 
-		basicMember temp(memberName, memberNum, memTypeBool, month, day, year);
+		member temp(memberName, memberNum, memTypeBool, month, day, year);
 
 		d.addMember(temp);
 	}

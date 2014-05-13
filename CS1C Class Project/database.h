@@ -10,7 +10,7 @@
 
 #include <string>
 #include <map>
-#include "basicMember.h"
+#include "member.h"
 #include "purchase.h"
 using namespace std;
 
@@ -22,7 +22,7 @@ public:
     database();
         //default constructor
 
-    void addMember(basicMember& input);
+    void addMember(member& input);
         //add a new member
         //Post: database is changed and input is added to maps
 
@@ -34,10 +34,10 @@ public:
         //remove the member with the name memberName
         //Post database is changed and the specified member is removed
 
-    basicMember& findMember(int memberID);
+    member& findMember(int memberID);
         //returns the member with the id memberID
 
-    basicMember& findMember(string memberName);
+    member& findMember(string memberName);
         //returns the member with the name memberName
 
     void addPurchase(purchase& input);
@@ -94,8 +94,8 @@ private:
         }
     };
 
-    map<int, basicMember> memberByIDMap;
-    map<string, basicMember> memberByNameMap;
+    map<int, member> memberByIDMap;
+    map<string, member> memberByNameMap;
     multimap<date, purchase, datecomp> purchaseByDateMap;
     multimap<int, purchase> purchaseByIDMap;
 };

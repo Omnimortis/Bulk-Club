@@ -12,13 +12,13 @@
 #include "date.h"
 using namespace std;
 
-class basicMember
+class member
 {
 public:
-    basicMember();
+    member();
         //default constructor
 
-    basicMember(string initName, int initID, bool initType, int monthInit,
+    member(string initName, int initID, bool initType, int monthInit,
     	   int dayInit, int yearInit);
         //non-default constructor
 
@@ -57,6 +57,13 @@ public:
     float getAmtSpent() const;
         //return the member's amount spent
 
+    void setRebate(float input);
+        //set the member's rebate amount
+        //Post: member is changed and rebate is set to input
+
+    float getRebate() const;
+        //return the preferred member's current rebate amount
+
     string toString() const;
         //return a string representation of the member
 
@@ -66,6 +73,7 @@ private:
     bool type;
     date expDate;
     float amtSpent;
+    float rebate;
 };
 
 #endif /* BASICMEMBER_H_ */
