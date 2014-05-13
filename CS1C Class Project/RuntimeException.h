@@ -9,6 +9,7 @@
 #define RUNTIMEEXCEPTION_H_
 
 #include <string>
+#include "Exception.h"
 using namespace std;
 
 /****************************************************************************
@@ -16,7 +17,7 @@ using namespace std;
  * This class is used for throwing exceptions. It contains an error message
  * that can be used to display with the getMessage functions during a catch.
  ***************************************************************************/
-class RuntimeException {
+class RuntimeException : public Exception {
 	private:
 		string errorMsg;		// OUTPUT - string error message
 	public:

@@ -491,6 +491,9 @@ int main()
 
 	                db.addPurchase(newPurchase);
 
+	                cout << "\nPurchase Added." << endl;
+
+	                pause();
 	                break;
 
 				case 2:
@@ -515,12 +518,14 @@ int main()
 							{
 								db.removeMember(name);
 								invalid = false;
+							    cout << "\nMember deleted." << endl;
 							}
 							catch(RuntimeException& err)
 							{
 								cout << err.getMessage();
 							}
 						}
+						pause();
 						break;
 					case 2:
 						while(invalid)
@@ -533,12 +538,14 @@ int main()
 						    {
 							    db.removeMember(id);
 							    invalid = false;
+							    cout << "\nMember deleted." << endl;
 						    }
 						    catch(RuntimeException& err)
 						    {
 						    	cout << err.getMessage();
 						    }
 						}
+						pause();
 					    break;
 					}
 
