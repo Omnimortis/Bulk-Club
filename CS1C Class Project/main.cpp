@@ -27,7 +27,8 @@ void PurchaseRead(database& d);
 int validInt(int, int);
 bool validBool();
 int getReportType(const vector<const char*> &);
-void printPurchases(database& db, date& day);
+//void printPurchases(database& db, date& day, int filterType);
+void printPurchases(database& db, date& day, int);
 void printPurchases(database& db, int id);
 void printPurchases(database& db, string name);
 void PurchaseWrite(database& db);
@@ -133,7 +134,8 @@ int main()
 				newDate.setDay(day);
 				newDate.setMonth(month);
 				newDate.setYear(year);
-				printPurchases(db, newDate);
+				printPurchases(db, newDate, filterType);
+			//	printPurchases(db, newDate, filterType);
 				break;
 			case PURCHASE_BY_ITEM:
 				cout << "Enter Item Name: ";
@@ -329,7 +331,7 @@ bool validBool()
     return choice;
 }
 
-void printPurchases(database& db, date& day)
+void printPurchases(database& db, date& day,int  filterType)
 {
 	int basicCount = 0, prefCount = 0;
 	float totalSales = 0;
@@ -348,12 +350,15 @@ void printPurchases(database& db, date& day)
             db.getPurchases(day).first;
             it!= db.getPurchases(day).second; ++it)
     {
+    	if(((filterType == 1) && !(it->second.getMember()->getType())) || ((filterType == 2) && (it->second.getMember()->getType())) || filterType == 3)
+    	{
        	cout << "| " << setw(30) <<  it->second.getItemName();
        	cout << "|$" << setw(7) << (it->second.getUnitPrice())/ (it->second.getQuantity());
     	cout << "| " << setw(5) << it->second.getQuantity();
     	cout << "| " << setw(22) << (it->second.getMember())->getName();
     	cout << "| " << setw(7) << (it->second.getMember())->getID();
     	cout << "| " << setw(10);
+    	totalSales+= (it->second.getUnitPrice());
 
     	if (it->second.getMember()->getType())
     	{
@@ -367,11 +372,12 @@ void printPurchases(database& db, date& day)
     	}
     	cout << "| " << endl;
 
-
+    	}
 
 
     }
-    cout << endl;
+    cout << endl << endl;
+    cout << "Total Sales: $" << totalSales << endl;
     cout << "Basic Shoppers: " << basicCount << endl;
     cout << "Preferred Shoppers: " << prefCount << endl;
 }
