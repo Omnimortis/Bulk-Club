@@ -58,9 +58,9 @@ void MemberWrite(database& db);
 // System pause and cin.ignore
 void pause();
 
-const int maxWidth = 80;  // used to format outpurt
+const int maxWidth = 80;  // used to format output
 
-// Enum of menu options
+// menu options
 enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_MEMBER, TOTAL_SALES,
 		PURCHASE_BY_ITEM, QUANTATIES, REBATES, DUES_PAID,
 		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,

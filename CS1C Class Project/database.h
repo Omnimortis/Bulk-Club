@@ -42,10 +42,13 @@ public:
         //returns the member with the name memberName
 
     int checkMember(int memberID);
+    	//returns 0 if a member with memberID doesn't exist
 
     int checkMember(string memberName);
+    	//returns 0 if a member with memberName doesn't exist
 
     int checkItem(string itemName);
+    	//returns 0 if an item with itemName doesn't exist
 
     void addPurchase(purchase& input);
         //add a new purchase
@@ -58,28 +61,28 @@ public:
     	//returns the total sales of the item with itemName
 
     map<int, member>::iterator memberIDMapBegin();
-    //returns an iterator that represents the beginning of the
-    //members sorted by ID
+    	//returns an iterator that represents the beginning of the
+    	//members sorted by ID
 
     map<int, member>::iterator memberIDMapEnd();
-    //returns an iterator that represents the end of the
-    //members sorted by ID
+    	//returns an iterator that represents the end of the
+    	//members sorted by ID
 
     map<string, member>::iterator memberNameMapBegin();
-    //returns an iterator that represents the beginning of the
-    //members sorted by name
+    	//returns an iterator that represents the beginning of the
+    	//members sorted by name
 
     map<string, member>::iterator memberNameMapEnd();
-    //returns an iterator that represents the end of the
-    //members sorted by name
+    	//returns an iterator that represents the end of the
+    	//members sorted by name
 
     map<string, int>::iterator quantityItemMapBegin();
-    //returns an iterator that represents the beginning of the
-    //items sorted by item name
+    	//returns an iterator that represents the beginning of the
+    	//items sorted by item name
 
     map<string, int>::iterator quantityItemMapEnd();
-    //returns an iterator that represents the end of the
-    //items sorted by item name
+    	//returns an iterator that represents the end of the
+    	//items sorted by item name
 
     multimap<int, purchase>::iterator purchaseByIDBegin();
         //returns an iterator that represents the beginning of the
@@ -100,6 +103,8 @@ public:
         //that have the member ID input
 
 private:
+    //comparator that defines how date are compared when being sorted in
+    //the map/multimap
     struct datecomp {
         bool operator () (const date& lhs, const date& rhs) const
         {
