@@ -22,21 +22,45 @@
 using namespace std;
 
 #define INTERFACE 1
-
+// Reads members from input file
 void MemberRead(database& d);
+
+// Reads purchases from input file
 void PurchaseRead(database& d);
+
+// Validates input between range
 int validInt(int, int);
+
+// Validates a yes or no input
 bool validBool();
+
+// Outputs report type options and accepts input
 int getReportType(const vector<const char*> &);
+
+// Prints all Purchases based on filter type input
 void printAllPurchases(database& db, int filterType);
+
+// Prints purchases for certain day and filter type
 void printPurchases(database& db, date& day, int filterType);
+
+// Prints purchases for certain member ID
 void printPurchases(database& db, int id);
+
+// Prints purchases for certain member name
 void printPurchases(database& db, string name);
+
+// Writes all purchases to output file
 void PurchaseWrite(database& db);
+
+// Writes all members to output file
 void MemberWrite(database& db);
+
+// System pause and cin.ignore
 void pause();
 
-const int maxWidth = 80;
+const int maxWidth = 80;  // used to format outpurt
+
+// Enum of menu options
 enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_MEMBER, TOTAL_SALES,
 		PURCHASE_BY_ITEM, QUANTATIES, REBATES, DUES_PAID,
 		MEMBERSHIP_EXPIRTATIONS, UPGRADES, DOWNGRADES, MODIFY_MEMBERS,
@@ -44,26 +68,30 @@ enum  {PURCHASE_BY_DAY = 1, PURCHASE_BY_MEMBER, TOTAL_SALES,
 
 int main()
 {
+	// Initialize database object to store and search data
+	// Database is comprised of two sets of STL maps and STL Multimaps
 	database db;
-
-	MemberRead(db);
-	PurchaseRead(db);
+	MemberRead(db); // Read member data from file
+	PurchaseRead(db);// Read purchase data from file
 
 #if INTERFACE
-	int menuChoice;
-	int filterType;
-	int month;
-	int day;
-	int year;
-	date newDate;
-	member newMember;
-	purchase newPurchase;
-	string name;
-	int id;
-	float price;
-	bool exit = false;
+	int menuChoice;  	// stores user menu choice input
+	int filterType;		// stores user input filter type
+	int month;			// used to store month values
+	int day;			// used to store day values
+	int year;			// used to store year values
+	date newDate;		// creates data object
+	member newMember;	// creates new member object
+	purchase newPurchase;// creates new purchase object
+	string name;		// string used to store member name
+	int id;				// int used to store member ID
+	float price;		// float used to store item price
+	bool exit = false;	// bool used to determine when to exit main loop
+	vector<const char*> menuOptions; // Vector used to hold menu choices
+	vector<const char*> reportType;  // Vector used to hold report type menu options
+    vector<const char*> modifyType;  // Vector used to store modify menu options
 	
-    vector<const char*> menuOptions;
+	// PROCESSING - push all available menu options into menuOptions Vector
     menuOptions.push_back("View Sales Report for a given day");
     menuOptions.push_back("View Purchases for given member");
     menuOptions.push_back("View all Purchases for all members");
@@ -77,17 +105,17 @@ int main()
     menuOptions.push_back("Add/Delete Members");
     menuOptions.push_back("Exit");
 
-	vector<const char*> reportType;
+	// PROCESSING - push all available filter type options into reportType Vector
     reportType.push_back("Basic Members Only");
     reportType.push_back("Preferred Members Only");
     reportType.push_back("All members");
 
-    vector<const char*> modifyType;
+	// PROCESSING - push all available modify options into modifyType Vector
     modifyType.push_back("Add");
     modifyType.push_back("Delete");
     modifyType.push_back("Go Back");
 
-	//output welcome statement
+	//OUTPUT -  welcome statement
 	cout << setfill('*')  << setw(maxWidth) <<"*" << endl
 	     << setw(maxWidth/3) << "| " << setw(2) << setfill(' ') <<""
 		 << "BULK CLUB MANAGER SUITE " << setw(2) << setfill(' ') <<""
@@ -111,11 +139,12 @@ int main()
 
 		// INPUT/OUTPUT - Call validInt function to accept valid input
 		//		          Returns into menuChoice integer variable
-
 		menuChoice = validInt(1, menuOptions.size());
 
 		cout << endl << menuOptions[menuChoice - 1] << endl << endl;
 
+		// IF filter options available for user menu choice, prompt for filter
+		//	type input
 		if (menuChoice != PURCHASE_BY_MEMBER &&
 				menuChoice != PURCHASE_BY_ITEM && menuChoice != QUANTATIES
 				&& menuChoice != REBATES && menuChoice != DUES_PAID &&
@@ -130,9 +159,10 @@ int main()
 
 		cout << setprecision(2) << fixed;
 
+		// SWITCH - select methods to call based on user input of menuChoice
 		switch(menuChoice)
 		{
-			case PURCHASE_BY_DAY:
+			case PURCHASE_BY_DAY:		// Accepts user input for purchase date
 				cout << "Enter the date for the sales report.\n";
 				cout << "Enter month: ";
 				month = validInt(1, 12);
@@ -143,41 +173,51 @@ int main()
 				newDate.setDay(day);
 				newDate.setMonth(month);
 				newDate.setYear(year);
+
+				// OUTPUT - display purchases for give day and filter
 				printPurchases(db, newDate, filterType);
 				pause();
 				break;
 
-			case PURCHASE_BY_MEMBER:
+			case PURCHASE_BY_MEMBER:    // Accepts user input for search type
 				cout << "Search by Member Name or Number?\n";
 				cout << "1. Member Name" << endl;
 				cout << "2. Member Number" << endl;
 				cout << "3. Exit" << endl;
 				cout << "\nPlease enter your choice: ";
+
+				// PROCESSING - depending on search type, accepts corresponding
+				//				input
 				menuChoice = validInt(1, 3);
 				if (menuChoice == 1)
 				{
 				    cout << "Enter the member name: ";
 				    getline(cin, name);
+
+				    // OUTPUT - Displays all purchases based on input user name
 				    printPurchases(db, name);
 				}
 				else if (menuChoice == 2)
 				{
+					 // OUTPUT - Displays all purchases based on input user ID
 				    cout << "Enter the member number: ";
 				    printPurchases(db, validInt(0, 99999));
 				}
 				pause();
 				break;
 
-			case TOTAL_SALES:
+			case TOTAL_SALES: // Prints all sales
 				printAllPurchases(db, filterType);
 				pause();
 				break;
-			case PURCHASE_BY_ITEM:
+			case PURCHASE_BY_ITEM: // Prompts for Item name input
 				cout << "Enter Item Name: ";
 				getline(cin, name);
 
+				// PROCESSING - checks if item is in database
 				if (db.checkItem(name) != 0)
 				{
+					// If found, displays sales information for product
 					cout << "\nQuantity of " << name << "s sold to date: "
 							<< db.getItemQuantity(name) << endl;
 					cout <<"Total revenue from all sales of " << name
@@ -185,14 +225,14 @@ int main()
 				}
 				else
 				{
+					// If not found, outputs error
 					cout << "\nNo " << name << "s have ever been sold."
 							<< endl;
 				}
-
 				pause();
 				break;
 
-			case QUANTATIES:
+			case QUANTATIES: // OUTPUT - displays quantities of items sold
 				cout << "Printing quantities of all items sold sorted by "
 						"item name:" << endl;
 
@@ -204,6 +244,8 @@ int main()
 			    cout << setw(40) << setfill('-') << "-" << setfill(' ')
 			    		<< endl;
 
+			    // PROCESSING - iterates through database, outputting
+			    //				quantity and total sales of each item (pre-sorted)
 				for (map<string ,int>::iterator it =
 						db.quantityItemMapBegin();
 						it!= db.quantityItemMapEnd(); it++)
@@ -218,7 +260,7 @@ int main()
 				 pause();
 				break;
 
-			case REBATES:
+			case REBATES:  // Displays rebate information for members
 				cout << "Printing rebate information for Preferred"
 				        " Members sorted by ID:" << endl;
 
@@ -231,9 +273,11 @@ int main()
 				cout << setw(45) << setfill('-') << "-" << setfill(' ')
 						<< endl;
 
+				// Iterates through memberIDMap of Database, outputting rebate info
 				for (map<int,member>::iterator it = db.memberIDMapBegin();
 						it != db.memberIDMapEnd(); it++)
 				{
+					// Checks if member is Preferred, if so outputs data for member
 					if (it->second.getType())
 					{
 					    cout << "| " << setw(22) << it->second.getName();
@@ -249,7 +293,7 @@ int main()
 				pause();
 				break;
 
-			case DUES_PAID:
+			case DUES_PAID:  // Displays membership dues
 				cout << "Printing membership dues sorted by membership "
 						"type and then by name:" << endl;
 
@@ -262,6 +306,8 @@ int main()
 				cout << setw(46) << setfill('-') << "-" << setfill(' ')
 						<< endl;
 
+				// Iterates though membernameMap, outputting dues info
+				// for Basic members
 				for (map<string,member>::iterator it =
 						db.memberNameMapBegin(); it !=
 								db.memberNameMapEnd(); it++)
@@ -276,6 +322,8 @@ int main()
 					}
 				}
 
+				// Iterates though membernameMap, outputting dues info
+				// for Preferred members
 				for (map<string,member>::iterator it =
 						db.memberNameMapBegin(); it !=
 								db.memberNameMapEnd(); it++)
@@ -296,9 +344,9 @@ int main()
 				pause();
 				break;
 
-			case MEMBERSHIP_EXPIRTATIONS:
+			case MEMBERSHIP_EXPIRTATIONS: // Checks membership expirations
 				cout << "Enter month to check membership expirations: ";
-				month = validInt(1, 12);
+				month = validInt(1, 12); // input validated month
 
 				cout << "\nMemberships that will expire in chosen month\n";
 				cout << setw(73) << setfill('-') << "-" << setfill(' ')
@@ -311,6 +359,8 @@ int main()
 				cout << setw(73) << setfill('-') << "-" << setfill(' ')
 						<< endl;
 
+				// Iterates through memberNameMap, checking for memberships
+				// of basic members that will expire in given month
 				for (map<string,member>::iterator it =
 						db.memberNameMapBegin(); it !=
 								db.memberNameMapEnd(); it++)
@@ -328,6 +378,8 @@ int main()
 					}
 				}
 
+				// Iterates through memberNameMap, checking for memberships
+				// of preferred members that will expire in given month
 				for (map<string,member>::iterator it =
 						db.memberNameMapBegin(); it !=
 								db.memberNameMapEnd(); it++)
@@ -351,7 +403,7 @@ int main()
 				pause();
 				break;
 
-			case UPGRADES:
+			case UPGRADES: // CALC/OUT - checks for upgrades
 				cout << "Checking for members that would benefit from an"
 				        " upgrade" << endl;
 
@@ -364,6 +416,7 @@ int main()
 				cout << setw(49) << setfill('-') << "-" << setfill(' ')
 						<< endl;
 
+				// Iterates through memberNameMap and checks for upgrades
 				for (map<string,member>::iterator it =
 						db.memberNameMapBegin(); it !=
 								db.memberNameMapEnd(); it++)
@@ -385,7 +438,7 @@ int main()
 				pause();
 				break;
 
-			case DOWNGRADES:
+			case DOWNGRADES:  // CALC/OUT - checks for downgrades
 				cout << "Checking for members that would benefit from an"
 				        " downgrade" << endl;
 
@@ -398,6 +451,7 @@ int main()
 				cout << setw(45) << setfill('-') << "-" << setfill(' ')
 						<< endl;
 
+				// Iterates through memberNameMap and checks for downgrades
 				for (map<string,member>::iterator it =
 						db.memberNameMapBegin(); it !=
 								db.memberNameMapEnd(); it++)
@@ -419,7 +473,7 @@ int main()
 				pause();
 				break;
 
-			case MODIFY_MEMBERS:
+			case MODIFY_MEMBERS: // Allows user to modify
 				cout << "What would you like to do?" << endl;
 				for (unsigned int i = 0; i < modifyType.size(); i++)
 				{
