@@ -477,30 +477,33 @@ int main()
 				cout << "What would you like to do?" << endl;
 				for (unsigned int i = 0; i < modifyType.size(); i++)
 				{
+					// Output modify type menu
                     cout << i+1 << ". "<< modifyType.at(i) << endl;
 				}
 
 				cout << "Please enter your choice: ";
-				menuChoice = validInt(1, 3);
+				menuChoice = validInt(1, 3); // accept input
 				cout << "You have chosen " << modifyType[menuChoice -1]
 				     << endl;
 
+				// switch for menu type
 				switch (menuChoice)
 				{
-				case 1:
+				case 1:  // ADD MEMBER
 				    cout << "Enter the name of the member you would like "
 				            "to add: ";
-				    getline(cin, name);
+				    getline(cin, name); // accept name and set name
 				    newMember.setName(name);
 
 				    cout << "Enter the ID of the member you would like to"
 				            " add: ";
-				    id = validInt(0, 99999);
+				    id = validInt(0, 99999); // accept id and set id
 				    newMember.setID(id);
 
 				    cout << "Is this a preferred member? (Yes or No): ";
-				    newMember.setType(validBool());
+				    newMember.setType(validBool()); // accept and set membership type
 
+				    // accept and set expiration date
 				    cout << "Enter the date that the membership will "
 				            "expire.\n";
 	                cout << "Enter month: ";
@@ -509,21 +512,23 @@ int main()
 	                day = validInt(1, 31);
 	                cout << "Enter year: ";
 	                year = validInt(1950, 2014);
-	                
 	                newMember.setExpDate(month, day, year);
 	                
+	                // Insert new member into database
 	                db.addMember(newMember);
 
 	                cout << "Member Added." << endl;
 	                cout << "Add a new purchase to " << name << endl;
 
+	                // Create new purchase for new member
 	                newPurchase.setMember(db.findMember(id));
 
+	                // Accept and input purchase item name
 	                cout << "\nEnter Item Name: ";
 				    getline(cin, name);
-
 				    newPurchase.setItemName(name);
 
+				    // Accept and set purchase date information
 				    cout << "Enter the purchase date." << endl;
 	                cout << "Enter month: ";
 	                month = validInt(1, 12);
@@ -531,22 +536,23 @@ int main()
 	                day = validInt(1, 31);
 	                cout << "Enter year: ";
 	                year = validInt(1950, 2014);
-
 	                newPurchase.setDate(month, day, year);
 
+	                // accept and set quantity of items purchased
 	                cout << "Enter the quantity: ";
 	                newPurchase.setQuantity(validInt(1,1000));
 
+	                // Accept and set unit price
 	                cout << "Enter the unit price: $";
 	                cin >> price;
 	                cin.ignore(1000, '\n');
 	                newPurchase.setUnitPrice(price *
 	                		newPurchase.getQuantity());
 
+	                // Insert purchase into database
 	                db.addPurchase(newPurchase);
 
 	                cout << "\nPurchase Added." << endl;
-
 	                pause();
 	                break;
 
